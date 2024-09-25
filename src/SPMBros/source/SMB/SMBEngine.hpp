@@ -62,6 +62,8 @@ public:
      */
     void update();
 
+    uint8_t readFromMemory(uint16_t address);
+
 private:
     // NES Emulation subsystems:
     APU* apu;

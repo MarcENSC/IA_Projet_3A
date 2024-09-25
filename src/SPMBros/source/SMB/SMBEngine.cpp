@@ -77,6 +77,10 @@ void SMBEngine::update()
     }
 }
 
+uint8_t SMBEngine::readFromMemory(uint16_t address) {
+    return readData(address);
+}
+
 //---------------------------------------------------------------------
 // Private methods
 //---------------------------------------------------------------------

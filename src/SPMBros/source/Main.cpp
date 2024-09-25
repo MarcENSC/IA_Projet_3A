@@ -10,6 +10,8 @@
 #include "Configuration.hpp"
 #include "Constants.hpp"
 
+#include "Emulation/MemoryAccess.hpp"
+
 uint8_t* romImage;
 static SDL_Window* window;
 static SDL_Renderer* renderer;
@@ -213,7 +215,7 @@ static void mainLoop()
         }
         if (keys[SDL_SCANCODE_ESCAPE])
         {
-            // quit
+            // Quit
             running = false;
             break;
         }
@@ -221,6 +223,16 @@ static void mainLoop()
         {
             SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
         }
+
+        // Récupérer la mémoire à l'adresse 0x86
+        uint8_t xpos = engine.readFromMemory(0x86);
+        uint8_t ypos = engine.readFromMemory(0xce);
+        uint8_t enem_xpos = engine.readFromMemory(0x87);
+        uint8_t enem_ypos = engine.readFromMemory(0xcf);
+        std::cout << "Player X position: " << (int)xpos << std::endl; // Affiche la valeur à l'adresse 0x86
+        std::cout << "Player Y position: " << (int)ypos << std::endl; // Affiche la valeur à l'adresse 0x86
+        std::cout << "Enemy X position: " << (int)enem_xpos << std::endl; // Affiche la valeur à l'adresse 0x86
+        std::cout << "Enemy Y position: " << (int)enem_ypos << std::endl; // Affiche la valeur à l'adresse 0x86
 
         engine.update();
         engine.render(renderBuffer);
@@ -234,7 +246,6 @@ static void mainLoop()
         SDL_RenderCopy(renderer, texture, NULL, NULL);
 
         // Render scanlines
-        //
         if (Configuration::getScanlinesEnabled())
         {
             SDL_RenderSetLogicalSize(renderer, RENDER_WIDTH * 3, RENDER_HEIGHT * 3);
@@ -243,10 +254,7 @@ static void mainLoop()
 
         SDL_RenderPresent(renderer);
 
-        /**
-         * Ensure that the framerate stays as close to the desired FPS as possible. If the frame was rendered faster, then delay. 
-         * If the frame was slower, reset time so that the game doesn't try to "catch up", going super-speed.
-         */
+        // Ensure that the framerate stays as close to the desired FPS as possible.
         int now = SDL_GetTicks();
         int delay = progStartTime + int(double(frame) * double(MS_PER_SEC) / double(Configuration::getFrameRate())) - now;
         if(delay > 0) 
@@ -261,6 +269,7 @@ static void mainLoop()
         frame++;
     }
 }
+
 
 int main(int argc, char** argv)
 {
