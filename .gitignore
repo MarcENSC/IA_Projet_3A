@@ -43,7 +43,7 @@ pip-delete-this-directory.txt
 
 #NES 
 build/
-*.nes
+
 *.pal
 smbc.conf
 
