@@ -18,6 +18,7 @@ build_project() {
     
     # Exécution de smbc avec la configuration
     ./smbc
+    cd ..
 }
 
 # Vérification de l'argument
