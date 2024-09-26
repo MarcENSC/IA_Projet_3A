@@ -28,7 +28,7 @@ Building
 From the root of the repo, execute:
 ```
 mkdir build
-cd build
+cd buil
 cmake ..
 make
 ```
