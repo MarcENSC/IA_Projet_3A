@@ -27,6 +27,7 @@ if [ "$1" == "build" ]; then
         echo "Build directory exists. Running smbc..."
         cd build
         ./smbc
+        cd ..
     else
         build_project
     fi
