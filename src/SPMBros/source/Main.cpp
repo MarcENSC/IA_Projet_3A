@@ -242,6 +242,7 @@ static void mainLoop()
         std::cout << "Timer frame ?: " << (int)timer << std::endl;
         std::cout << "Test: " << (int)test << std::endl;
 
+
 //        uint8_t data_1 = engine.readFromMemory(0x76);
 //        std::cout << "Data 1: " << (int)data_1 << std::endl;
 //
