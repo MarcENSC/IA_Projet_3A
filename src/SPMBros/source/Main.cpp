@@ -233,14 +233,14 @@ static void mainLoop()
         uint8_t timer = engine.readFromMemory(0x0787);
         uint8_t test = engine.readFromMemory(0xa5);
 
-        std::cout << "===========================" << std::endl;
-        std::cout << "Player X position: " << (int)xpos << std::endl;
-        std::cout << "Player Y position: " << (int)ypos << std::endl;
-        std::cout << "Enemy X position: " << (int)enem_xpos << std::endl;
-        std::cout << "Enemy Y position: " << (int)enem_ypos << std::endl;
-        std::cout << "enemy type: " << (int)enemy_type << std::endl;
-        std::cout << "Timer frame ?: " << (int)timer << std::endl;
-        std::cout << "Test: " << (int)test << std::endl;
+//        std::cout << "===========================" << std::endl;
+//        std::cout << "Player X position: " << (int)xpos << std::endl;
+//        std::cout << "Player Y position: " << (int)ypos << std::endl;
+//        std::cout << "Enemy X position: " << (int)enem_xpos << std::endl;
+//        std::cout << "Enemy Y position: " << (int)enem_ypos << std::endl;
+//        std::cout << "enemy type: " << (int)enemy_type << std::endl;
+//        std::cout << "Timer frame ?: " << (int)timer << std::endl;
+//        std::cout << "Test: " << (int)test << std::endl;
 
 
 //        uint8_t data_1 = engine.readFromMemory(0x76);
