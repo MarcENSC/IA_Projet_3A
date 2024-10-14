@@ -207,6 +207,21 @@ static bool initialize()
     return true;
 }
 
+static void shutdownSockets()
+{
+    if (clientSocket != -1)
+    {
+        close(clientSocket);  // Fermer le socket client
+        clientSocket = -1;
+    }
+
+    if (serverSocket != -1)
+    {
+        close(serverSocket);  // Fermer le socket serveur
+        serverSocket = -1;
+    }
+}
+
 /**
  * Shutdown libraries for exit.
  */
@@ -218,6 +233,8 @@ static void shutdown()
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+
+    shutdownSockets();
 
     SDL_Quit();
 }
@@ -293,7 +310,7 @@ static void mainLoop()
 
         if (clientSocket != -1) // Si le client est connecté
         {
-            std::string data = "Player X position: " + std::to_string((int)xpos) + "\n";
+            std::string data = std::to_string((int)xpos);
             send(clientSocket, data.c_str(), data.size(), 0);
         }
 

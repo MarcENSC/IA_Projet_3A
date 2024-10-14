@@ -27,27 +27,37 @@ def perform_action(actions, duration):
     for action in actions:
         subprocess.run(['xdotool', 'keyup', action.value])
 
-def connect_server():
+def connect_to_server():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect(('127.0.0.1', 8080))
     return client_socket
 
 ################### SCRIPT ###################
+
 print("Waiting for game/server")
 subprocess.Popen(['bash', '../SPMBros/buildproject_from_python.sh', 'build'])
+time.sleep(2)
 print("Game/Server launched")
 
-time.sleep(2)
+print("====================")
 
 print("Waiting for client")
-client = connect_server()
+client = connect_to_server()
 print("Client launched")
 
-print("Client active")
+
+print("====================")
+
+print("Client listening...")
+
 while True:
     data = client.recv(1024)
     if not data:
         break
-    print(data.decode('utf-8'))
+    X_pos = data.decode('utf-8')
+
+    if X_pos == "90":
+        perform_action([Action.JUMP],1)
+
 client.close()
 print("Client died")
