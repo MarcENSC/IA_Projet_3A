@@ -1,42 +1,53 @@
 import subprocess
 import time
 from enum import Enum
+import socket
 
 class Action(Enum):
     MOVE_RIGHT = 'Right'
     MOVE_LEFT = 'Left'
     CROUCH = 'Down'
-    RUN = 'Z'
-    JUMP = 'X'
-    ENTER = 'Return'
-    ESCAPE = 'Escape'
+    RUN = 'R'
+    JUMP = 'E'
+    ENTER = 'Y'
+    ESCAPE = 'T'
 
 def perform_action(actions, duration):
-    """Exécute plusieurs actions (pressions de touches) pendant une durée donnée."""
-    # Appuyer sur toutes les touches spécifiées
+    """
+    Args :
+    actions : List of actions from Action enum (ex : [Action.RUN, Action.MOVE_RIGHT])
+    duration : duration of the action (ex: 3 for 3sec)
+    """
+
     for action in actions:
         subprocess.Popen(['xdotool', 'keydown', action.value])
 
     time.sleep(duration)
 
-    # Relâcher toutes les touches spécifiées
     for action in actions:
         subprocess.run(['xdotool', 'keyup', action.value])
 
-def perform_actions():
+def connect_server():
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect(('127.0.0.1', 8080))
+    return client_socket
 
-    perform_action([Action.MOVE_RIGHT, Action.RUN], 1.8)
-    perform_action([Action.MOVE_RIGHT, Action.JUMP, Action.RUN], 0.5)
-    time.sleep(0.3)
-    perform_action([Action.MOVE_RIGHT, Action.JUMP, Action.RUN], 0.05)
-    perform_action([Action.MOVE_RIGHT, Action.RUN], 1)
-    perform_action([Action.MOVE_RIGHT, Action.JUMP, Action.RUN], 1)
-
-
+################### SCRIPT ###################
+print("Waiting for game/server")
 subprocess.Popen(['bash', '../SPMBros/buildproject_from_python.sh', 'build'])
-time.sleep(2)
-subprocess.run(['xdotool', 'keydown', 'Return'])
-subprocess.run(['xdotool', 'keyup', 'Return'])
+print("Game/Server launched")
 
-time.sleep(4)
-perform_actions()
+time.sleep(2)
+
+print("Waiting for client")
+client = connect_server()
+print("Client launched")
+
+print("Client active")
+while True:
+    data = client.recv(1024)
+    if not data:
+        break
+    print(data.decode('utf-8'))
+client.close()
+print("Client died")
