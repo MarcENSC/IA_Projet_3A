@@ -1,8 +1,8 @@
 import subprocess
 import time
-import struct
 import socket
 from enum import Enum
+
 
 class Action(Enum):
     MOVE_RIGHT = 'Right'
@@ -13,13 +13,13 @@ class Action(Enum):
     ENTER = 'Y'
     ESCAPE = 'T'
 
+
 def perform_action(actions, duration):
     """
     Args:
     actions: List of actions from Action enum (e.g., [Action.RUN, Action.MOVE_RIGHT])
     duration: duration of the action (e.g., 3 for 3 seconds)
     """
-    # Key down for each action
     for action in actions:
         subprocess.Popen(['xdotool', 'keydown', action.value])
 
@@ -29,10 +29,14 @@ def perform_action(actions, duration):
     for action in actions:
         subprocess.run(['xdotool', 'keyup', action.value])
 
+def press(action):
+    subprocess.Popen(['xdotool', 'keydown', action.value])
+
 def connect_to_server():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect(('127.0.0.1', 8080))
     return client_socket
+
 
 ################### SCRIPT ###################
 
@@ -49,25 +53,36 @@ print("Client launched")
 
 print("====================")
 
+time.sleep(1)
+
+print("Starting game...")
+perform_action([Action.ENTER],1)
+time.sleep(3)
+
+print("====================")
+
 print("Client listening...")
 
-while True:
-    data = bytearray()  # Initialize a bytearray to accumulate data
-    while len(data) < 2:  # Ensure we receive exactly 2 bytes
-        packet = client.recv(2 - len(data))  # Receive the remaining bytes needed
-        if not packet:
-            break
-        data.extend(packet)
+# press(Action.MOVE_RIGHT)
 
-    if len(data) != 2:
-        print(f"Unexpected data length: {len(data)}")
+while True:
+    # Receive data
+    data = client.recv(1024)
+
+    if not data:
         break
 
-    x_position, y_position = struct.unpack('BB', data)
-    print(f"Received Position - X: {x_position}, Y: {y_position}")
+    # read out data
+    decoded_data = data.decode('utf-8').strip()
 
-    # Check the X position to perform an action
-    if x_position == 90:  # Adjust this condition as needed
-        perform_action([Action.JUMP], 1)
+    # split data to get pos_x and pos_y
+    positions = decoded_data.split(',')
+
+    if len(positions) >= 2:
+        x_pos, y_pos = map(int, positions[:2])
+        print(x_pos,y_pos)
+        # if abs(enemy_x_pos - x_pos) < 10:
+        #     press(Action.JUMP)
+
 client.close()
 print("Client died")
