@@ -15,9 +15,6 @@ build_project() {
     # Exécution de CMake et compilation du projet
     cmake ..
     make
-    
-    # Exécution de smbc avec la configuration
-    ./smbc
     cd ..
 }
 

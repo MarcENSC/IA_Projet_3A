@@ -302,7 +302,7 @@ static void mainLoop()
         // Récupérer la mémoire à l'adresse 0x86
         uint8_t xpos = engine.readFromMemory(0x86);
         uint8_t ypos = engine.readFromMemory(0xce);
-        uint8_t enem_xpos = engine.readFromMemory(0x87);
+        uint8_t enem_xpos = engine.readFromMemory(0x88);
         uint8_t enem_ypos = engine.readFromMemory(0xcf);
         uint8_t enemy_type = engine.readFromMemory(0x16);
         uint8_t timer = engine.readFromMemory(0x0787);
@@ -310,18 +310,12 @@ static void mainLoop()
 
         if (clientSocket != -1) // Si le client est connecté
         {
-            std::string data = std::to_string((int)xpos);
+            // Formater les données en chaîne de caractères avec positions X et Y
+            std::string data = std::to_string((int)xpos) + "," + std::to_string((int)ypos);
+
+            // Envoyer les données
             send(clientSocket, data.c_str(), data.size(), 0);
         }
-
-//        std::cout << "===========================" << std::endl;
-//        std::cout << "Player X position: " << (int)xpos << std::endl;
-//        std::cout << "Player Y position: " << (int)ypos << std::endl;
-//        std::cout << "Enemy X position: " << (int)enem_xpos << std::endl;
-//        std::cout << "Enemy Y position: " << (int)enem_ypos << std::endl;
-//        std::cout << "enemy type: " << (int)enemy_type << std::endl;
-//        std::cout << "Timer frame ?: " << (int)timer << std::endl;
-//        std::cout << "Test: " << (int)test << std::endl;
 
         engine.update();
         engine.render(renderBuffer);
@@ -356,6 +350,7 @@ static void mainLoop()
             progStartTime = now;
         }
         frame++;
+        SDL_Delay(10);
     }
 }
 
