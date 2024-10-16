@@ -107,7 +107,7 @@ while True:
 
         enemy_coord_X = 256 * enemy_page + e1
         player_coord_X = 256 * player_page + x_pos
-        ecart = abs(enemy_coord_X - player_coord_X)
+        ecart = enemy_coord_X - player_coord_X
         if not f1:
             ecart = "null"
 
