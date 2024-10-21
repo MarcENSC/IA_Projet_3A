@@ -3,6 +3,9 @@ import time
 import socket
 from enum import Enum
 
+# Choose os : "linux", "mac"
+os = "mac"
+
 class Action(Enum):
     MOVE_RIGHT = 'Right'
     MOVE_LEFT = 'Left'
@@ -43,26 +46,19 @@ def connect_to_server():
 
 ################### SCRIPT ###################
 
+print("====================")
 print("Waiting for game/server")
-subprocess.Popen(['bash', '../SPMBros/buildproject_from_python.sh', 'build'])
+
+subprocess.Popen(['bash', "../SPMBros/buildproject_from_python.sh", 'build'])
 time.sleep(2)
 print("Game/Server launched")
 
 print("====================")
-
 print("Waiting for client")
 client = connect_to_server()
 print("Client launched")
 
 print("====================")
-
-time.sleep(2)
-
-print("Starting game...")
-perform_action([Action.ENTER],1)
-
-print("====================")
-
 print("Client listening...")
 
 while True:
@@ -76,6 +72,7 @@ while True:
 
     # read out data
     decoded_data = data.decode('utf-8').strip()
+    print(f"========= RECEIVED DATA =========")
     print(decoded_data)
 
     # split data to get pos_x and pos_y
@@ -83,15 +80,18 @@ while True:
 
     if len(data) >= 14 and data[0] != '':
 
+        # Name data
         x_pos, y_pos = map(int, data[:2])
         e1,e2,e3,e4,e5 = map(int, data [2:7])
         f1,f2,f3,f4,f5 = map(int, data [7:12])
         player_page = int(data[12])
         enemy_page = int(data[13])
 
+        # Determine real coords
         enemy_coord_X = 256 * enemy_page + e1
         player_coord_X = 256 * player_page + x_pos
 
+        # Get gap
         ecart = enemy_coord_X - player_coord_X
         if not f1:
             ecart = "null"
@@ -102,14 +102,6 @@ while True:
               f"Existence : {f1} | Page : {enemy_page} | Xpos : {e1} | Xcoord : {enemy_coord_X}")
         print("========= MISC =========")
         print(f"Ecart entre player et enemy 1 : {ecart}")
-
-        # print(x_pos,y_pos)
-        # print(player_page)
-        # print(enemy_page)
-        # print(e1,e2,e3,e4,e5)
-        # print(abs(e1 - x_pos))
-        # print(f1 and abs(e1 - x_pos) < 50)
-        # print(f1,f2,f3,f4,f5)
 
 client.close()
 print("Client died")
