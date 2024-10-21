@@ -70,7 +70,7 @@ jumping = False
 
 while True:
     print("##########################################")
-
+   
     # Receive data
     data = client.recv(1024)
 
