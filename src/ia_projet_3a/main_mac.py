@@ -12,57 +12,25 @@ class Action(Enum):
     ENTER = 'Y'
     ESCAPE = 'T'
 
-
-def perform_action(actions, duration):
-    """
-    Args:
-    actions: List of actions from Action enum (e.g., [Action.RUN, Action.MOVE_RIGHT])
-    duration: duration of the action (e.g., 3 for 3 seconds)
-    """
-    for action in actions:
-        subprocess.Popen(['xdotool', 'keydown', action.value])
-
-    time.sleep(duration)
-
-    # Key up for each action
-    for action in actions:
-        subprocess.run(['xdotool', 'keyup', action.value])
-
-def press(action):
-    subprocess.Popen(['xdotool', 'keydown', action.value])
-
-def unpress(action):
-    subprocess.Popen(['xdotool', 'keyup', action.value])
-
-
 def connect_to_server():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect(('127.0.0.1', 8080))
     return client_socket
 
-
 ################### SCRIPT ###################
 
+print("====================")
 print("Waiting for game/server")
 subprocess.Popen(['bash', '../SPMBros/buildproject_from_python.sh', 'build'])
 time.sleep(2)
 print("Game/Server launched")
 
 print("====================")
-
 print("Waiting for client")
 client = connect_to_server()
 print("Client launched")
 
 print("====================")
-
-time.sleep(2)
-
-print("Starting game...")
-perform_action([Action.ENTER],1)
-
-print("====================")
-
 print("Client listening...")
 
 while True:
