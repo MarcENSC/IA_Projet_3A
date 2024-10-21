@@ -168,16 +168,21 @@ static void shutdownSockets()
 {
     if (clientSocket != -1)
     {
+        std::cout << "Shutting down client socket" << std::endl;
+        shutdown(clientSocket, SHUT_RDWR);  // Interrompre envoi/réception
         close(clientSocket);  // Fermer le socket client
         clientSocket = -1;
     }
 
     if (serverSocket != -1)
     {
+        std::cout << "Shutting down server socket" << std::endl;
+        shutdown(serverSocket, SHUT_RDWR);  // Interrompre envoi/réception
         close(serverSocket);  // Fermer le socket serveur
         serverSocket = -1;
     }
 }
+
 
 /**
  * Shutdown libraries for exit.

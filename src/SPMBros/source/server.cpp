@@ -17,11 +17,12 @@
 #include "Constants.hpp"
 
 #include "Emulation/MemoryAccess.hpp"
+
 int serverSocket;
 int clientSocket;
+
 bool initializeServer()
 {
-    
     // Créer le socket
     serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket < 0)
@@ -30,11 +31,20 @@ bool initializeServer()
         return false;
     }
 
+    // Définir l'option SO_REUSEADDR pour réutiliser le port immédiatement après la fermeture
+    int opt = 1;
+    if (setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
+    {
+        perror("Erreur de setsockopt");
+        close(serverSocket);  // Fermer le socket en cas d'erreur
+        return false;
+    }
+
     // Configurer l'adresse du serveur
     struct sockaddr_in serverAddr;
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_addr.s_addr = INADDR_ANY; // Accepter toutes les connexions
-    serverAddr.sin_port = htons(8080); // Port 8080
+    serverAddr.sin_port = htons(8080);       // Port 8080
 
     // Lier le socket
     if (bind(serverSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0)
@@ -52,6 +62,8 @@ bool initializeServer()
         return false;
     }
 
+    std::cout << "Serveur en écoute sur le port 8080" << std::endl;
+
     // Accepter une connexion
     clientSocket = accept(serverSocket, nullptr, nullptr);
     if (clientSocket < 0)
@@ -61,5 +73,6 @@ bool initializeServer()
         return false;
     }
 
+    std::cout << "Client connecté!" << std::endl;
     return true;
 }
