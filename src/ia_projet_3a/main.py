@@ -1,10 +1,7 @@
 import subprocess
 import time
-import socket
 from enum import Enum
-
-# Choose os : "linux", "mac"
-os = "mac"
+from methods import *
 
 class Action(Enum):
     MOVE_RIGHT = 'Right'
@@ -15,54 +12,26 @@ class Action(Enum):
     ENTER = 'Y'
     ESCAPE = 'T'
 
-
-def perform_action(actions, duration):
-    """
-    Args:
-    actions: List of actions from Action enum (e.g., [Action.RUN, Action.MOVE_RIGHT])
-    duration: duration of the action (e.g., 3 for 3 seconds)
-    """
-    for action in actions:
-        subprocess.Popen(['xdotool', 'keydown', action.value])
-
-    time.sleep(duration)
-
-    # Key up for each action
-    for action in actions:
-        subprocess.run(['xdotool', 'keyup', action.value])
-
-def press(action):
-    subprocess.Popen(['xdotool', 'keydown', action.value])
-
-def unpress(action):
-    subprocess.Popen(['xdotool', 'keyup', action.value])
-
-
-def connect_to_server():
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(('127.0.0.1', 8080))
-    return client_socket
-
-
 ################### SCRIPT ###################
 
-print("====================")
-print("Waiting for game/server")
+# Choose os : "linux", "mac"
+# used_os = "mac"
 
+print("====================\nWaiting for game/server")
 subprocess.Popen(['bash', "../SPMBros/buildproject_from_python.sh", 'build'])
 time.sleep(2)
 print("Game/Server launched")
 
-print("====================")
-print("Waiting for client")
+print("====================\nWaiting for client")
 client = connect_to_server()
 print("Client launched")
 
-print("====================")
-print("Client listening...")
+floors, stocks = extract_floors_and_stocks('../maps/World11.json')
+
+print("====================\nClient listening...")
 
 while True:
-    print("##########################################")
+    print(2*"##########################################\n")
    
     # Receive data
     data = client.recv(1024)
@@ -72,6 +41,7 @@ while True:
 
     # read out data
     decoded_data = data.decode('utf-8').strip()
+    
     print(f"========= RECEIVED DATA =========")
     print(decoded_data)
 
@@ -102,6 +72,10 @@ while True:
               f"Existence : {f1} | Page : {enemy_page} | Xpos : {e1} | Xcoord : {enemy_coord_X}")
         print("========= MISC =========")
         print(f"Ecart entre player et enemy 1 : {ecart}")
+        print(f"Au dessus du sol : {is_above_floor(player_coord_X/2,floors)}")
+
+
+    print("\n")
 
 client.close()
 print("Client died")

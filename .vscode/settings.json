@@ -74,5 +74,9 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp"
-    }
+    },
+    "cmake.ignoreCMakeListsMissing": true,
+    "python.analysis.extraPaths": [
+        "./src/ia_projet_3a"
+    ]
 }
