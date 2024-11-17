@@ -10,7 +10,7 @@ build_project() {
     echo "[audio]" > smbc.conf
     echo "frequency = 22050" >> smbc.conf
     echo "[game]" >> smbc.conf
-    echo "rom_file = ../../NES/Super Mario Bros. (JU) (PRG0) [!].nes" >> smbc.conf
+    echo "rom_file = ../Super Mario Bros. (JU) (PRG0) [!].nes" >> smbc.conf
     
     # Exécution de CMake et compilation du projet
     cmake ..
