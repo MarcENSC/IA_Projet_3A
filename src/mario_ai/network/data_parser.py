@@ -1,6 +1,6 @@
 from game_manager import environment
 
-def parse_game_data(data):
+def parse_game_data(data,map_mat):
     """ Parser les données reçues du serveur (position du joueur, des ennemis, etc.) """
     data_parts = data.decode('utf-8').strip().split(',')
     
@@ -18,10 +18,27 @@ def parse_game_data(data):
     if not f1:
         ecart = -1
 
+    player_x_bloc = int(player_x / 16)
+    player_y_bloc = 16 - int(player_y / 16) - 3
+
+    print(f"map_state:")
+    # for row in map_mat[-player_y_bloc-2:-player_y_bloc+3]:
+    #     print("".join(row[player_x_bloc-2:player_x_bloc+3]))
+    
+    view = 3
+
+    for i in range(-view,view+1):
+        print("")
+        for j in range(-view,view+1):
+            if i==j==0:
+                print("M",end="")
+            else:
+                print(map_mat[-player_y_bloc+i][player_x_bloc+j],end="")
+
     # Retourner un état de jeu structuré
     return {
         'player_position': (player_x, player_y),
         'enemy_1_existence': (f1),
         'enemy_1_x_position': (enemy_1_x),
-        'ecart_player_enemy_1': (ecart)
+        'ecart_player_enemy_1': (ecart),
     }

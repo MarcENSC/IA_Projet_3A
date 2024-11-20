@@ -19,7 +19,8 @@ def main():
     logger.log("Connected to game server")
 
     # Charger la carte
-    floors, stocks = map_manager.extract_floors_and_stocks('maps/World11.json')
+    filename = 'maps/World11.json'
+    map_matrix = map_manager.parse_json_to_matrix(filename)
 
     # Initialiser l'agent IA
     # NN = neural_network.NN(8,32,5)
@@ -30,7 +31,7 @@ def main():
         if not data:
             break
         
-        game_state = data_parser.parse_game_data(data)
+        game_state = data_parser.parse_game_data(data,map_matrix)
         logger.log(game_state)
 
         # Décider de l'action à prendre
