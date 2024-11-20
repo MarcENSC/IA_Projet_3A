@@ -20,20 +20,18 @@ def parse_game_data(data,map_mat):
 
     player_x_bloc = int(player_x / 16)
     player_y_bloc = 16 - int(player_y / 16) - 3
-
-    print(f"map_state:")
-    # for row in map_mat[-player_y_bloc-2:-player_y_bloc+3]:
-    #     print("".join(row[player_x_bloc-2:player_x_bloc+3]))
     
     view = 3
-
+    map_state = []
     for i in range(-view,view+1):
         print("")
         for j in range(-view,view+1):
             if i==j==0:
-                print("M",end="")
+                0
+                # print("M",end="")
             else:
-                print(map_mat[-player_y_bloc+i][player_x_bloc+j],end="")
+                map_state.append(map_mat[-player_y_bloc+i][player_x_bloc+j])
+                # print(map_mat[-player_y_bloc+i][player_x_bloc+j],end="")
 
     # Retourner un état de jeu structuré
     return {
@@ -41,4 +39,5 @@ def parse_game_data(data,map_mat):
         'enemy_1_existence': (f1),
         'enemy_1_x_position': (enemy_1_x),
         'ecart_player_enemy_1': (ecart),
+        'map_state': (map_state)
     }
