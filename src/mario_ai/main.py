@@ -38,16 +38,20 @@ def main():
     }
     logger.log("Dictionnary initialized")
 
+    time.sleep(2)
+    controls.press(Action.ENTER)
+    time.sleep(3)
+
     logger.log("Looping now")
 
     while True:
         # Recevoir les données du serveur
-        data = client.recv(1024)
+        data = client.recv(4096)
         if not data:
             break
 
         game_state = data_parser.parse_game_data(data,map_matrix)
-        # logger.log(game_state)
+        logger.log(game_state)
         
         input = [game_state['player_position_x'],
                  game_state['player_position_y'],
@@ -71,7 +75,8 @@ def main():
         action_dict = controls.handle_action_request(action_dict)
 
         logger.log(action_dict)
-        
+    
+    controls.stop()
     client.close()
     logger.log("Game Over")
 

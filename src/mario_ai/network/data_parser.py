@@ -22,16 +22,24 @@ def parse_game_data(data,map_mat):
     player_y_bloc = 16 - int((player_y + 8)/ 16) - 3
     
     view = 3
+
     map_state = []
-    for i in range(-view,view+1):
+    for i in range(-view, view + 1):
         print("")
-        for j in range(-view,view+1):
+        for j in range(-view, view + 1):
             if i==j==0:
                 0
-                # print("M",end=" ")
             else:
-                map_state.append(map_mat[-player_y_bloc+i][player_x_bloc+j])
-                # print(map_mat[-player_y_bloc+i][player_x_bloc+j],end=" ")
+                y_index = -player_y_bloc + i
+                x_index = player_x_bloc + j
+                
+                if 0 <= y_index < len(map_mat) and 0 <= x_index < len(map_mat[0]):
+                    map_state.append(map_mat[y_index][x_index])
+                    # print(map_mat[y_index][x_index], end=" ")
+                else:
+                    map_state.append(0)
+                    # print("0", end=" ")
+
 
     # Retourner un état de jeu structuré
     return {

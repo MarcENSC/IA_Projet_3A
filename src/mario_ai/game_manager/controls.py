@@ -19,3 +19,7 @@ def press(action):
 def unpress(action):
     """ Simuler le relâchement d'une touche """
     subprocess.Popen(['xdotool', 'keyup', action.value])
+
+def stop():
+    for a in Action:
+        unpress(a)
