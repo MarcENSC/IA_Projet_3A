@@ -27,7 +27,7 @@ def parse_json_to_matrix(filename, cell_size=8):
     max_y //= cell_size
 
     # Initialise la matrice
-    matrix = [['0' for _ in range(max_x + 1)] for _ in range(max_y + 1)]
+    matrix = [[0 for _ in range(max_x + 1)] for _ in range(max_y + 1)]
 
     # Remplit la matrice avec les objets
     for area in data['areas']:
@@ -38,21 +38,22 @@ def parse_json_to_matrix(filename, cell_size=8):
             symbol = item.get('thing', item.get('macro', ' '))
             if symbol == "Floor":
                 for i in range(item.get('width', cell_size) // cell_size):
-                    matrix[y][x + i] = '1'
+                    matrix[y][x + i] = 1
             elif symbol == "Brick":
-                matrix[y][x] = '1'
+                matrix[y][x] = 1
             elif symbol == "Block":
-                matrix[y][x] = '1'
+                matrix[y][x] = 1
             elif symbol == "Goomba":
-                matrix[y][x] = '0'
+                matrix[y][x] = 0
             elif symbol == "Pipe":
-                for i in range(item.get('height', cell_size) // cell_size):
-                    matrix[y - i][x] = '1'
+                for i in range(1+item.get('height', cell_size) // cell_size):
+                    matrix[y - i][x] = 1
+                    matrix[y - i][x+1] = 1
             elif symbol == "Stone":
                 for i in range(item.get('height', cell_size) // cell_size):
-                    matrix[y - i][x] = '1'
+                    matrix[y - i][x] = 1
             else:
-                matrix[y][x] = '0'
+                matrix[y][x] = 0
 
     return matrix
 

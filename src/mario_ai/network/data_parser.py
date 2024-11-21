@@ -9,17 +9,17 @@ def parse_game_data(data,map_mat):
     f1,f2,f3,f4,f5 = map(int, data_parts [7:12])
     player_page = int(data_parts[12])
     enemy_1_page = int(data_parts[13])
-
+    
     enemy_1_x = 256 * enemy_1_page + e1
     player_x = 256 * player_page + player_x_pos
     player_y = player_y_pos
 
     ecart = enemy_1_x - player_x
     if not f1:
-        ecart = -1
+        ecart = 200
 
-    player_x_bloc = int(player_x / 16)
-    player_y_bloc = 16 - int(player_y / 16) - 3
+    player_x_bloc = int((player_x + 8) / 16)
+    player_y_bloc = 16 - int((player_y + 8)/ 16) - 3
     
     view = 3
     map_state = []
@@ -28,16 +28,17 @@ def parse_game_data(data,map_mat):
         for j in range(-view,view+1):
             if i==j==0:
                 0
-                # print("M",end="")
+                # print("M",end=" ")
             else:
                 map_state.append(map_mat[-player_y_bloc+i][player_x_bloc+j])
-                # print(map_mat[-player_y_bloc+i][player_x_bloc+j],end="")
+                # print(map_mat[-player_y_bloc+i][player_x_bloc+j],end=" ")
 
     # Retourner un état de jeu structuré
     return {
-        'player_position': (player_x, player_y),
-        'enemy_1_existence': (f1),
-        'enemy_1_x_position': (enemy_1_x),
-        'ecart_player_enemy_1': (ecart),
-        'map_state': (map_state)
+        'player_position_x': player_x,
+        'player_position_y': player_y,
+        'enemy_1_existence': f1,
+        'enemy_1_x_position': enemy_1_x,
+        'ecart_player_enemy_1': ecart,
+        'map_state': map_state
     }
