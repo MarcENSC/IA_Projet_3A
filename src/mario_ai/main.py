@@ -8,7 +8,6 @@ from network import server, data_parser
 from utils import logger
 
 def main():
-    logger.clear()
     logger.log("Starting the game IA...")
 
     # Lancer le jeu (C++ côté serveur)
@@ -46,7 +45,7 @@ def main():
 
     t=0
 
-    while t<500:
+    while t<5000:
         # Recevoir les données du serveur
         data = client.recv(4096)
         if not data:
@@ -62,14 +61,14 @@ def main():
         input_tensor = torch.tensor(input, dtype=torch.float32)
 
         # Décider de l'action à prendre
-        action = NN.forward(input_tensor).tolist()
+        output = NN.forward(input_tensor).tolist()
 
-        action_dict['up']['need_press'] = action[0]
-        action_dict['down']['need_press'] = action[1]
-        action_dict['left']['need_press'] = action[2]
-        action_dict['right']['need_press'] = action[3]
-        action_dict['run']['need_press'] = action[4]
-        action_dict['jump']['need_press'] = action[5]
+        action_dict['up']['need_press'] = output[0]
+        action_dict['down']['need_press'] = output[1]
+        action_dict['left']['need_press'] = output[2]
+        action_dict['right']['need_press'] = output[3]
+        action_dict['run']['need_press'] = output[4]
+        action_dict['jump']['need_press'] = output[5]
 
         # Exécuter l'action (simuler la pression de la touche)
         action_dict = controls.handle_action_request(action_dict)
@@ -83,4 +82,5 @@ def main():
     main()
 
 if __name__ == "__main__":
+    logger.clear()
     main()
