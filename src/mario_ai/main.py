@@ -44,7 +44,9 @@ def main():
 
     logger.log("Looping now")
 
-    while True:
+    t=0
+
+    while t<500:
         # Recevoir les données du serveur
         data = client.recv(4096)
         if not data:
@@ -69,16 +71,16 @@ def main():
         action_dict['run']['need_press'] = action[4]
         action_dict['jump']['need_press'] = action[5]
 
-        logger.log(action_dict)
-
         # Exécuter l'action (simuler la pression de la touche)
         action_dict = controls.handle_action_request(action_dict)
 
-        logger.log(action_dict)
+        # logger.log(action_dict)
+        t+=1
     
     controls.stop()
     client.close()
     logger.log("Game Over")
+    main()
 
 if __name__ == "__main__":
     main()
