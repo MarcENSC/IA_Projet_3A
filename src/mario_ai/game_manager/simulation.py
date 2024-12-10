@@ -11,7 +11,7 @@ from ai import individual
 def start_simulation(ind: individual):
     # Lancer le jeu (C++ côté serveur)
     # logger.log("Launching game...")
-    subprocess.Popen(['bash', "../SPMBros/buildproject_from_python.sh", 'build'])
+    subprocess.Popen(['bash', "../SPMBros/buildproject_from_python.sh", 'build'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)    
     time.sleep(2)
 
     # Connexion au serveur
@@ -86,6 +86,6 @@ def start_simulation(ind: individual):
 
     controls.stop()
     client.close()
-    logger.log("Game Over")
+    # logger.log("Game Over")
 
     return ind

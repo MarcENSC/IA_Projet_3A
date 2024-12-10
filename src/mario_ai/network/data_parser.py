@@ -3,6 +3,22 @@ from game_manager import environment
 def parse_game_data(data,map_mat):
     """ Parser les données reçues du serveur (position du joueur, des ennemis, etc.) """
     data_parts = data.decode('utf-8').strip().split(',')
+
+    data = {
+        'player_position_x': 0,
+        'player_position_y': 0,
+        'enemy_1_existence': 0,
+        'enemy_1_x_position': 0,
+        'ecart_player_enemy_1': 0,
+        'map_state': [0 for _ in range(48)],
+        'player_x_speed': 0,
+        'nb_enemies': 0
+    }
+
+    if len(data_parts)<15:
+        print(data_parts)
+        print(".",end="")
+        return data
     
     player_x_pos, player_y_pos = map(int, data_parts[:2])
     player_page = int(data_parts[2])
@@ -44,15 +60,15 @@ def parse_game_data(data,map_mat):
                     map_state.append(0)
                     # print("0", end=" ")
 
+    data['player_position_x'] = player_x / 3150
+    data['player_position_y'] = player_y / 180
+    data['enemy_1_existence'] = f1
+    data['enemy_1_x_position'] = enemy_1_x
+    data['ecart_player_enemy_1'] = ecart / 200
+    data['map_state'] = map_state
+    data['player_x_speed'] = player_X_speed
+    data['nb_enemies'] = nb_enemies
+
 
     # Retourner un état de jeu structuré
-    return {
-        'player_position_x': player_x/3150,
-        'player_position_y': player_y/180,
-        'enemy_1_existence': f1,
-        'enemy_1_x_position': enemy_1_x,
-        'ecart_player_enemy_1': ecart/200,
-        'map_state': map_state,
-        'player_x_speed': player_X_speed,
-        'nb_enemies': nb_enemies
-    }
+    return data
