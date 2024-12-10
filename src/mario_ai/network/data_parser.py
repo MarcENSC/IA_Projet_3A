@@ -5,10 +5,11 @@ def parse_game_data(data,map_mat):
     data_parts = data.decode('utf-8').strip().split(',')
     
     player_x_pos, player_y_pos = map(int, data_parts[:2])
-    e1,e2,e3,e4,e5 = map(int, data_parts [2:7])
-    f1,f2,f3,f4,f5 = map(int, data_parts [7:12])
-    player_page = int(data_parts[12])
-    enemy_1_page = int(data_parts[13])
+    player_page = int(data_parts[2])
+    player_X_speed = int(data_parts[3])
+    e1,e2,e3,e4,e5 = map(int, data_parts [4:9])
+    f1,f2,f3,f4,f5 = map(int, data_parts [9:14])
+    enemy_1_page = int(data_parts[14])
     
     enemy_1_x = 256 * enemy_1_page + e1
     player_x = 256 * player_page + player_x_pos
@@ -18,6 +19,8 @@ def parse_game_data(data,map_mat):
     if not f1:
         ecart = 200
 
+    nb_enemies = f1 + f2 + f3 + f4 + f5
+
     player_x_bloc = int((player_x + 8) / 16)
     player_y_bloc = 16 - int((player_y + 8)/ 16) - 3
     
@@ -25,7 +28,7 @@ def parse_game_data(data,map_mat):
 
     map_state = []
     for i in range(-view+1, view + 2):
-        print("")
+        # print("")
         for j in range(-view, view + 1):
             if i==j==0:
                 0
@@ -49,5 +52,7 @@ def parse_game_data(data,map_mat):
         'enemy_1_existence': f1,
         'enemy_1_x_position': enemy_1_x,
         'ecart_player_enemy_1': ecart/200,
-        'map_state': map_state
+        'map_state': map_state,
+        'player_x_speed': player_X_speed,
+        'nb_enemies': nb_enemies
     }

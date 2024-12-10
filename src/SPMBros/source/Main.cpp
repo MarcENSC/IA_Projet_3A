@@ -264,23 +264,22 @@ static void mainLoop()
         // Récupérer la mémoire
         uint8_t xpos = engine.readFromMemory(0x86);
         uint8_t ypos = engine.readFromMemory(0xce);
+        uint8_t player_page = engine.readFromMemory(0x6d);
+        uint8_t player_X_speed = engine.readFromMemory(0x57);
+        
+
         uint8_t enem_x_pos1 = engine.readFromMemory(0x87);
         uint8_t enem_x_pos2 = engine.readFromMemory(0x88);
         uint8_t enem_x_pos3 = engine.readFromMemory(0x89);
         uint8_t enem_x_pos4 = engine.readFromMemory(0x8a);
         uint8_t enem_x_pos5 = engine.readFromMemory(0x8b);
+
         uint8_t enem_flag1 = engine.readFromMemory(0x0f);
         uint8_t enem_flag2 = engine.readFromMemory(0x10);
         uint8_t enem_flag3 = engine.readFromMemory(0x11);
         uint8_t enem_flag4 = engine.readFromMemory(0x12);
         uint8_t enem_flag5 = engine.readFromMemory(0x13);
-        uint8_t player_page = engine.readFromMemory(0x6d);
-        uint8_t enemy_page = engine.readFromMemory(0x6e);
-
-//        uint8_t enem_ypos = engine.readFromMemory(0xcf);
-//        uint8_t enemy_type = engine.readFromMemory(0x16);
-//        uint8_t timer = engine.readFromMemory(0x0787);
-
+        
         uint8_t enemy_page1 = engine.readFromMemory(0x6e);
         uint8_t enemy_page2 = engine.readFromMemory(0x6f);
         uint8_t enemy_page3 = engine.readFromMemory(0x70);
@@ -288,11 +287,17 @@ static void mainLoop()
         uint8_t enemy_page5 = engine.readFromMemory(0x72);
         uint8_t enemy_page6 = engine.readFromMemory(0x73);
 
+//        uint8_t enem_ypos = engine.readFromMemory(0xcf);
+//        uint8_t enemy_type = engine.readFromMemory(0x16);
+//        uint8_t timer = engine.readFromMemory(0x0787);
+
         if (clientSocket != -1) // Si le client est connecté
         {
             // Formater les données en chaîne de caractères avec positions X et Y
             std::string data = std::to_string((int)xpos) + "," +
                                std::to_string((int)ypos) + "," +
+                               std::to_string((int)player_page) + "," +
+                               std::to_string((int)player_X_speed) + "," +
                                std::to_string((int)enem_x_pos1) + "," +
                                std::to_string((int)enem_x_pos2) + "," +
                                std::to_string((int)enem_x_pos3) + "," +
@@ -303,8 +308,7 @@ static void mainLoop()
                                std::to_string((int)enem_flag3) + "," +
                                std::to_string((int)enem_flag4) + "," +
                                std::to_string((int)enem_flag5) + "," +
-                               std::to_string((int)player_page) + "," +
-                               std::to_string((int)enemy_page) + ",";
+                               std::to_string((int)enemy_page1) + ",";
 
             // Envoyer les données
             send(clientSocket, data.c_str(), data.size(), 0);
