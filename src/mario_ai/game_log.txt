@@ -1,3 +1,4 @@
-2024-12-10 21:52:31,842 - INFO - Log file cleared.
-2024-12-10 21:52:31,843 - INFO - Starting the game AI...
-2024-12-10 22:21:13,109 - INFO - Generation 1 finished ! Best score : 0.09904761904761905
+2024-12-11 22:50:52,869 - INFO - Log file cleared.
+2024-12-11 22:50:52,870 - INFO - Starting the game AI...
+2024-12-11 22:53:14,580 - INFO - Generation 1 finished ! Best score : 0.09777777777777778
+2024-12-11 22:57:48,109 - INFO - Generation 2 finished ! Best score : 0.1

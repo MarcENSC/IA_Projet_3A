@@ -25,4 +25,3 @@ class Individual:
             if rnd.random() < m_rate:
                 mutation_factor = torch.normal(mean=torch.zeros_like(p), std=m_range * torch.ones_like(p))
                 p.data += mutation_factor
-                p.data = torch.clamp(p.data, min=-1, max=1)

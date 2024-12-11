@@ -6,11 +6,9 @@ class NN(nn.Module):
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(48 + 3, 512),
+            nn.Linear(48 + 3, 64),
             nn.ReLU(),
-            nn.Linear(512, 512),
-            nn.ReLU(),
-            nn.Linear(512, 6),
+            nn.Linear(64, 6),
         )
         self.sigmoid = nn.Sigmoid()
 

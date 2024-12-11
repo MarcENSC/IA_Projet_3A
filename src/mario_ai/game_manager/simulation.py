@@ -54,7 +54,7 @@ def start_simulation(ind: individual):
         game_state = data_parser.parse_game_data(data,map_matrix)
         # logger.log(game_state)
         
-        if t%50 == 0:
+        if t%100 == 0:
             if (game_state['player_x_speed'] == 0) and is_still:
                 break
             is_still = (game_state['player_x_speed'] == 0)
