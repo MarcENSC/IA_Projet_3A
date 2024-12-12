@@ -1,5 +1,6 @@
 from torch import nn
 import random as rnd
+import copy
 
 class NN(nn.Module):
     def __init__(self):
@@ -20,6 +21,10 @@ class NN(nn.Module):
         return bool_outputs
 
 def cross(parent1_nn, parent2_nn, alpha=0.5):
+    # Clone the parent networks so that they are independent copies
+    parent1_nn = copy.deepcopy(parent1_nn)
+    parent2_nn = copy.deepcopy(parent2_nn)
+
     # Get the parameters (weights and biases) from both parent neural networks
     parent1_params = list(parent1_nn.parameters())
     parent2_params = list(parent2_nn.parameters())

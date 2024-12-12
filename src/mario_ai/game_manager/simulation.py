@@ -7,6 +7,7 @@ from ai import neural_network
 from network import server, data_parser
 from utils import logger
 from ai import individual
+import torch
 
 def start_simulation(ind: individual):
     # Lancer le jeu (C++ côté serveur)
@@ -39,7 +40,9 @@ def start_simulation(ind: individual):
 
     time.sleep(2)
     controls.press(Action.ENTER)
-    time.sleep(3)
+    time.sleep(1)
+    controls.unpress(Action.ENTER)
+    time.sleep(6)
 
     # logger.log("Looping now")
 
@@ -63,7 +66,7 @@ def start_simulation(ind: individual):
                 game_state['player_position_y'],
                 game_state['ecart_player_enemy_1']] + game_state['map_state']
         # logger.log(input)
-
+        
         input_tensor = torch.tensor(input, dtype=torch.float32)
 
         output = NN.forward(input_tensor).tolist()
@@ -77,7 +80,7 @@ def start_simulation(ind: individual):
 
         # Exécuter l'action (simuler la pression de la touche)
         action_dict = controls.handle_action_request(action_dict)
-
+        
         # logger.log(action_dict)
         t+=1
 

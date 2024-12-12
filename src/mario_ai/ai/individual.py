@@ -3,9 +3,13 @@ import random as rnd
 import torch
 
 class Individual:
+    id_counter = 0  # Variable de classe pour compter les identifiants uniques
+
     def __init__(self, neural_network, score=0.0):
         self.neural_network = neural_network
         self.score = score
+        self.id = Individual.id_counter  # Attribuer l'identifiant unique
+        Individual.id_counter += 1  # Incrémenter l'identifiant pour le prochain individu
 
     def set_score(self, score):
         self.score = score
@@ -16,8 +20,8 @@ class Individual:
     def get_neural_network(self):
         return self.neural_network
 
-    def cross(self,ind1,ind2):
-        self.neural_network = cross(ind1.neural_network,ind2.neural_network, rnd.random())
+    def cross(self, ind1, ind2):
+        self.neural_network = cross(ind1.neural_network, ind2.neural_network, rnd.random())
 
     def mutate(self, m_rate, m_range):
         params = list(self.neural_network.parameters())

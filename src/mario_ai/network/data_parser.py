@@ -53,7 +53,7 @@ def parse_game_data(data,map_mat):
                     else:
                         map_state.append(0)
                         # print("0", end=" ")
-
+                        
         data['player_position_x'] = player_x / 3150
         data['player_position_y'] = player_y / 180
         data['enemy_1_existence'] = f1
@@ -64,6 +64,7 @@ def parse_game_data(data,map_mat):
         data['nb_enemies'] = nb_enemies
 
     except:
+        print("error")
         0
 
     # Retourner un état de jeu structuré
