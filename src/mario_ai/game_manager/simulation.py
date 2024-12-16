@@ -58,11 +58,12 @@ def start_simulation(ind: individual):
 
         game_state = data_parser.parse_game_data(data,map_matrix)
         # logger.log(game_state)
-        
+
         if t%100 == 0:
-            if (game_state['player_x_speed'] == 0) and is_still:
+            speed = abs(game_state['player_x_speed']) + abs(game_state['player_y_speed'])
+            if (speed < 5) and is_still and not game_state["enemy_1_existence"]:
                 break
-            is_still = (game_state['player_x_speed'] == 0)
+            is_still = (speed < 5)
 
         input = [game_state['player_position_x'],
                 game_state['player_position_y'],
@@ -85,7 +86,7 @@ def start_simulation(ind: individual):
         
         # logger.log(action_dict)
         t+=1
-
+        
         if 1>game_state['player_position_x']>ind.get_score():
             ind.set_score(game_state['player_position_x'])
 

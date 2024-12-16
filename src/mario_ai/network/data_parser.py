@@ -10,6 +10,7 @@ def parse_game_data(data,map_mat):
         'ecart_player_enemy_1': 0,
         'map_state': [0 for _ in range(48)],
         'player_x_speed': 0,
+        'player_y_speed': 0,
         'nb_enemies': 0
     }
     
@@ -17,9 +18,10 @@ def parse_game_data(data,map_mat):
         player_x_pos, player_y_pos = map(int, data_parts[:2])
         player_page = int(data_parts[2])
         player_X_speed = int(data_parts[3])
-        e1,e2,e3,e4,e5 = map(int, data_parts [4:9])
-        f1,f2,f3,f4,f5 = map(int, data_parts [9:14])
-        enemy_1_page = int(data_parts[14])
+        player_Y_speed = int(data_parts[4])
+        e1,e2,e3,e4,e5 = map(int, data_parts [5:10])
+        f1,f2,f3,f4,f5 = map(int, data_parts [10:15])
+        enemy_1_page = int(data_parts[15])
         
         enemy_1_x = 256 * enemy_1_page + e1
         player_x = 256 * player_page + player_x_pos
@@ -61,10 +63,11 @@ def parse_game_data(data,map_mat):
         data['ecart_player_enemy_1'] = ecart / 200
         data['map_state'] = map_state
         data['player_x_speed'] = player_X_speed
+        data['player_y_speed'] = player_Y_speed
         data['nb_enemies'] = nb_enemies
 
-    except:
-        0
+    except Exception as e:
+        print(f"Error: {e}")
 
     # Retourner un état de jeu structuré
     return data

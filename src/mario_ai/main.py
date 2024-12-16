@@ -25,7 +25,6 @@ def main():
         # Evaluate
         actual_ind = 1
         for ind in population:
-            ind.set_score(0)
             simulation.start_simulation(ind)
             print(f"{actual_ind}/{nb_ind} - ID {ind.id} - Score {ind.score}")
             actual_ind += 1

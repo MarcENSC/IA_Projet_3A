@@ -261,6 +261,7 @@ static void mainLoop()
         uint8_t ypos = engine.readFromMemory(0xce);
         uint8_t player_page = engine.readFromMemory(0x6d);
         uint8_t player_X_speed = engine.readFromMemory(0x57);
+        uint8_t player_Y_speed = engine.readFromMemory(0x9f);
 
         uint8_t enem_x_pos1 = engine.readFromMemory(0x87);
         uint8_t enem_x_pos2 = engine.readFromMemory(0x88);
@@ -292,6 +293,7 @@ static void mainLoop()
                                std::to_string((int)ypos) + "," +
                                std::to_string((int)player_page) + "," +
                                std::to_string((int)player_X_speed) + "," +
+                               std::to_string((int)player_Y_speed) + "," +
                                std::to_string((int)enem_x_pos1) + "," +
                                std::to_string((int)enem_x_pos2) + "," +
                                std::to_string((int)enem_x_pos3) + "," +
