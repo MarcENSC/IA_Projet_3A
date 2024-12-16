@@ -26,8 +26,6 @@ static SDL_Texture *scanlineTexture;
 static SMBEngine *smbEngine = nullptr;
 static uint32_t renderBuffer[RENDER_WIDTH * RENDER_HEIGHT];
 
-
-
 /**
  * Load the Super Mario Bros. ROM image.
  */
@@ -63,8 +61,6 @@ static void audioCallback(void *userdata, uint8_t *buffer, int len)
         smbEngine->audioCallback(buffer, len);
     }
 }
-
-
 
 /**
  * Initialize libraries for use.
@@ -169,20 +165,19 @@ static void shutdownSockets()
     if (clientSocket != -1)
     {
         std::cout << "Shutting down client socket" << std::endl;
-        shutdown(clientSocket, SHUT_RDWR);  // Interrompre envoi/réception
-        close(clientSocket);  // Fermer le socket client
+        shutdown(clientSocket, SHUT_RDWR); // Interrompre envoi/réception
+        close(clientSocket);               // Fermer le socket client
         clientSocket = -1;
     }
 
     if (serverSocket != -1)
     {
         std::cout << "Shutting down server socket" << std::endl;
-        shutdown(serverSocket, SHUT_RDWR);  // Interrompre envoi/réception
-        close(serverSocket);  // Fermer le socket serveur
+        shutdown(serverSocket, SHUT_RDWR); // Interrompre envoi/réception
+        close(serverSocket);               // Fermer le socket serveur
         serverSocket = -1;
     }
 }
-
 
 /**
  * Shutdown libraries for exit.
@@ -266,7 +261,6 @@ static void mainLoop()
         uint8_t ypos = engine.readFromMemory(0xce);
         uint8_t player_page = engine.readFromMemory(0x6d);
         uint8_t player_X_speed = engine.readFromMemory(0x57);
-        
 
         uint8_t enem_x_pos1 = engine.readFromMemory(0x87);
         uint8_t enem_x_pos2 = engine.readFromMemory(0x88);
@@ -279,7 +273,7 @@ static void mainLoop()
         uint8_t enem_flag3 = engine.readFromMemory(0x11);
         uint8_t enem_flag4 = engine.readFromMemory(0x12);
         uint8_t enem_flag5 = engine.readFromMemory(0x13);
-        
+
         uint8_t enemy_page1 = engine.readFromMemory(0x6e);
         uint8_t enemy_page2 = engine.readFromMemory(0x6f);
         uint8_t enemy_page3 = engine.readFromMemory(0x70);
@@ -287,9 +281,9 @@ static void mainLoop()
         uint8_t enemy_page5 = engine.readFromMemory(0x72);
         uint8_t enemy_page6 = engine.readFromMemory(0x73);
 
-//        uint8_t enem_ypos = engine.readFromMemory(0xcf);
-//        uint8_t enemy_type = engine.readFromMemory(0x16);
-//        uint8_t timer = engine.readFromMemory(0x0787);
+        //        uint8_t enem_ypos = engine.readFromMemory(0xcf);
+        //        uint8_t enemy_type = engine.readFromMemory(0x16);
+        //        uint8_t timer = engine.readFromMemory(0x0787);
 
         if (clientSocket != -1) // Si le client est connecté
         {
@@ -347,7 +341,7 @@ static void mainLoop()
             progStartTime = now;
         }
         frame++;
-        SDL_Delay(25);
+        SDL_Delay(0);
     }
 }
 

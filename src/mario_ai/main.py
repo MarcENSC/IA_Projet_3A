@@ -1,4 +1,4 @@
-from utils import logger
+from utils import logger, save
 from game_manager import simulation
 from ai import neural_network
 from ai.individual import Individual
@@ -11,7 +11,7 @@ def main():
 
     logger.log("Starting the game AI...")
     
-    nb_ind = 50
+    nb_ind = 100
     best_ind_ratio = 0.2  # Between 0 and 1
     nb_best_ind = int(nb_ind * best_ind_ratio)
     mutation_rate = 0.2
@@ -32,16 +32,16 @@ def main():
         
         # Select Best
         population.sort(key=lambda x: -x.score)
-        best_score = population[0].score
+        # best_individuals = []
+        # for _ in range(nb_best_ind):
+        #     ind1, ind2 = rnd.sample(population, 2)
+        #     best_ind = ind1 if ind1.score > ind2.score else ind2
+        #     best_individuals.append(best_ind)
+        #     population.remove(best_ind)
 
-        best_individuals = [population[0]]
-
-        population.remove(population[0])
-        for _ in range(nb_best_ind-1):
-            ind1, ind2 = rnd.sample(population, 2)
-            best_ind = ind1 if ind1.score > ind2.score else ind2
-            best_individuals.append(best_ind)
-            population.remove(best_ind)
+        best_individuals = population[:nb_best_ind]
+        best_score = best_individuals[0].score
+        save.export_nn_to_json(best_individuals[0].neural_network, "nn.json")
 
         # Reproduce
         children = []

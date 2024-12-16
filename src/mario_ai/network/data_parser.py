@@ -64,7 +64,6 @@ def parse_game_data(data,map_mat):
         data['nb_enemies'] = nb_enemies
 
     except:
-        print("error")
         0
 
     # Retourner un état de jeu structuré

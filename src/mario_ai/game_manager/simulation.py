@@ -19,6 +19,8 @@ def start_simulation(ind: individual):
     client = server.connect_to_server()
     # logger.log("Connected to game server")
 
+    if not client:
+        return ind
 
     # Charger la carte
     filename = 'maps/World11.json'
@@ -38,11 +40,11 @@ def start_simulation(ind: individual):
     }
     # logger.log("Dictionnary initialized")
 
-    time.sleep(2)
+    time.sleep(1)
     controls.press(Action.ENTER)
     time.sleep(1)
     controls.unpress(Action.ENTER)
-    time.sleep(6)
+    time.sleep(3)
 
     # logger.log("Looping now")
 
