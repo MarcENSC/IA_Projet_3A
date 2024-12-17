@@ -50,7 +50,8 @@ def start_simulation(ind: individual):
 
     t=0
     is_still = False
-    
+    velocity_over_time = [255 for _ in range(100)]
+
     while t<5000:
         data = client.recv(4096)
         if not data:
@@ -58,18 +59,17 @@ def start_simulation(ind: individual):
 
         game_state = data_parser.parse_game_data(data,map_matrix)
         # logger.log(game_state)
+        
+        speed = abs(255*game_state['player_x_speed']) + abs(255*game_state['player_y_speed'])
+        velocity_over_time.append(speed)
 
-        if t%100 == 0:
-            speed = abs(game_state['player_x_speed']) + abs(game_state['player_y_speed'])
-            if (speed < 5) and is_still and game_state['nb_enemies']==0:
-                break
-            is_still = (speed < 5)
+        if all(v < 5 for v in velocity_over_time[-50:]) and game_state['nb_enemies']==0:
+            break
 
         input = [game_state['player_x_speed'],
                 game_state['player_y_speed'],
                 game_state['nb_enemies']] + game_state['map_state'] + game_state['ecarts']
-        # logger.log(input)
-        
+
         input_tensor = torch.tensor(input, dtype=torch.float32)
 
         output = NN.forward(input_tensor).tolist()

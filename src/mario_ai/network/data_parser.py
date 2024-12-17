@@ -16,8 +16,8 @@ def parse_game_data(data,map_mat):
     try:
         player_x_pos, player_y_pos = map(int, data_parts[:2])
         player_page = int(data_parts[2])
-        player_X_speed = int(data_parts[3])
-        player_Y_speed = int(data_parts[4])
+        player_X_speed = int(data_parts[3])/255
+        player_Y_speed = int(data_parts[4])/255
         e1,e2,e3,e4,e5 = map(int, data_parts [5:10])
         f1,f2,f3,f4,f5 = map(int, data_parts [10:15])
         ep1,ep2,ep3,ep4,ep5 = map(int,data_parts[15:20])

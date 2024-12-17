@@ -3,6 +3,7 @@ from utils import logger
 from game_manager import simulation
 from ai import neural_network
 from ai.individual import Individual
+from statistics import mean
 import random as rnd
 import torch
 
@@ -17,13 +18,14 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
 
     # ind = Individual(neural_network.NN(), 0)
     population = [Individual(neural_network.NN(), 0) for _ in range(nb_ind)]
+    children = population[nb_best_ind:]
 
     while True:
         # Evaluate
         actual_ind = 1
-        for ind in population:
+        for ind in children:
             simulation.start_simulation(ind)
-            print(f"{actual_ind}/{nb_ind} - ID {ind.id} - Score {ind.score}")
+            print(f"{actual_ind}/{nb_ind - nb_best_ind} - ID {ind.id} - Score {ind.score}")
             actual_ind += 1
         
         # Select Best
@@ -52,5 +54,5 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
 
         population = best_individuals + children
 
-        logger.log(f"Generation {nb_gen} finished ! Best score : {best_score}")
+        logger.log(f"Generation {nb_gen} finished !\nBest score : {best_score}\nMean score : {mean([i.score for i in population])}")
         nb_gen += 1
