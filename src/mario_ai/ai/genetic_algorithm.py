@@ -37,7 +37,7 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
 
         best_individuals = population[:nb_best_ind]
         best_score = best_individuals[0].score
-        nn_save_manager.export_nn_to_json(best_individuals[0].neural_network, "../saves/nn.json")
+        nn_save_manager.export_nn_to_json(best_individuals[0].neural_network, "saves/nn.json")
 
         # Reproduce
         children = []

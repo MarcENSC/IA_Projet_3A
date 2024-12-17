@@ -6,7 +6,7 @@ class NN(nn.Module):
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(48 + 3, 64),
+            nn.Linear(80 + 8, 64),
             nn.ReLU(),
             nn.Linear(64, 6),
         )

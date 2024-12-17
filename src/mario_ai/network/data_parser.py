@@ -5,10 +5,9 @@ def parse_game_data(data,map_mat):
     data = {
         'player_position_x': 0,
         'player_position_y': 0,
-        'enemy_1_existence': 0,
-        'enemy_1_x_position': 0,
+        'ecarts' : [0 for _ in range(5)],
         'ecart_player_enemy_1': 0,
-        'map_state': [0 for _ in range(48)],
+        'map_state': [0 for _ in range(80)],
         'player_x_speed': 0,
         'player_y_speed': 0,
         'nb_enemies': 0
@@ -21,22 +20,27 @@ def parse_game_data(data,map_mat):
         player_Y_speed = int(data_parts[4])
         e1,e2,e3,e4,e5 = map(int, data_parts [5:10])
         f1,f2,f3,f4,f5 = map(int, data_parts [10:15])
-        enemy_1_page = int(data_parts[15])
-        
-        enemy_1_x = 256 * enemy_1_page + e1
+        ep1,ep2,ep3,ep4,ep5 = map(int,data_parts[15:20])
+
+        enemy_flags = [f1,f2,f3,f4,f5]
+        enemies_positions_x = [
+            256 * ep1 + e1,
+            256 * ep2 + e2,
+            256 * ep3 + e3,
+            256 * ep4 + e4,
+            256 * ep5 + e5
+        ]
         player_x = 256 * player_page + player_x_pos
         player_y = player_y_pos
 
-        ecart = enemy_1_x - player_x
-        if not f1:
-            ecart = 200
+        ecarts = [(enemies_positions_x[i]-player_x)/200 if enemy_flags[i] else 1 for i in range(5)]
 
-        nb_enemies = f1 + f2 + f3 + f4 + f5
+        nb_enemies = (f1 + f2 + f3 + f4 + f5) / 5
 
         player_x_bloc = int((player_x + 8) / 16)
         player_y_bloc = 16 - int((player_y + 8)/ 16) - 3
         
-        view = 3
+        view = 4
 
         map_state = []
         for i in range(-view+1, view + 2):
@@ -58,9 +62,7 @@ def parse_game_data(data,map_mat):
                         
         data['player_position_x'] = player_x / 3150
         data['player_position_y'] = player_y / 180
-        data['enemy_1_existence'] = f1
-        data['enemy_1_x_position'] = enemy_1_x
-        data['ecart_player_enemy_1'] = ecart / 200
+        data['ecarts'] = ecarts
         data['map_state'] = map_state
         data['player_x_speed'] = player_X_speed
         data['player_y_speed'] = player_Y_speed

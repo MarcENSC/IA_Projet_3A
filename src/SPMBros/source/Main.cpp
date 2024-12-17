@@ -304,7 +304,11 @@ static void mainLoop()
                                std::to_string((int)enem_flag3) + "," +
                                std::to_string((int)enem_flag4) + "," +
                                std::to_string((int)enem_flag5) + "," +
-                               std::to_string((int)enemy_page1) + ",";
+                               std::to_string((int)enemy_page1) + "," +
+                               std::to_string((int)enemy_page2) + "," +
+                               std::to_string((int)enemy_page3) + "," +
+                               std::to_string((int)enemy_page4) + "," +
+                               std::to_string((int)enemy_page5) + ",";
 
             // Envoyer les données
             send(clientSocket, data.c_str(), data.size(), 0);
