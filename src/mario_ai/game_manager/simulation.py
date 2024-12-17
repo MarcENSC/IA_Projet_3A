@@ -49,10 +49,9 @@ def start_simulation(ind: individual):
     # logger.log("Looping now")
 
     t=0
-    is_still = False
-    velocity_over_time = [255 for _ in range(100)]
+    velocity_over_time = [255 for _ in range(50)]
 
-    while t<5000:
+    while t<2500:
         data = client.recv(4096)
         if not data:
             break
@@ -62,8 +61,7 @@ def start_simulation(ind: individual):
         
         speed = abs(255*game_state['player_x_speed']) + abs(255*game_state['player_y_speed'])
         velocity_over_time.append(speed)
-
-        if all(v < 5 for v in velocity_over_time[-50:]) and game_state['nb_enemies']==0:
+        if all(v == 0 for v in velocity_over_time[-50:]) and game_state['nb_enemies']==0:
             break
 
         input = [game_state['player_x_speed'],

@@ -54,5 +54,7 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
 
         population = best_individuals + children
 
+        print("\n*******************************\n*******************************\n")
         logger.log(f"Generation {nb_gen} finished !\nBest score : {best_score}\nMean score : {mean([i.score for i in population])}")
+        print("\n*******************************\n*******************************\n")
         nb_gen += 1
