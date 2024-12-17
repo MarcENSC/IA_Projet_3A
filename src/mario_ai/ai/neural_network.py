@@ -1,5 +1,4 @@
 from torch import nn
-import random as rnd
 import copy
 
 class NN(nn.Module):

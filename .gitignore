@@ -173,3 +173,5 @@ cython_debug/
 #.idea/
 
 *.txt
+nn.json
+nn_save.json

@@ -67,7 +67,8 @@ def parse_game_data(data,map_mat):
         data['nb_enemies'] = nb_enemies
 
     except Exception as e:
-        print(f"Error: {e}")
+        0
+        # print(f"Error: {e}")
 
     # Retourner un état de jeu structuré
     return data

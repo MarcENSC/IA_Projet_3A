@@ -1,7 +1,7 @@
 import logging
 
 # Configuration du logger
-log_file = 'game_log.txt'
+log_file = "saves/log.txt"
 
 logging.basicConfig(
     level=logging.INFO,  # Le niveau de base des messages à afficher (INFO, DEBUG, WARNING, etc.)
