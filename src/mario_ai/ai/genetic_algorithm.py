@@ -30,16 +30,29 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
         
         # Select Best
         population.sort(key=lambda x: -x.score)
-        # best_individuals = []
-        # for _ in range(nb_best_ind):
-        #     ind1, ind2 = rnd.sample(population, 2)
-        #     best_ind = ind1 if ind1.score > ind2.score else ind2
-        #     best_individuals.append(best_ind)
-        #     population.remove(best_ind)
+        best_score = population[0].score
+        nn_save_manager.export_nn_to_json(population[0].neural_network, "saves/nn.json")
 
-        best_individuals = population[:nb_best_ind]
-        best_score = best_individuals[0].score
-        nn_save_manager.export_nn_to_json(best_individuals[0].neural_network, "saves/nn.json")
+        new_population_best = []
+        new_population_worst = []
+        for _ in range(nb_ind//2):
+            ind1, ind2 = rnd.sample(population, 2)
+            if ind1.score > ind2.score:
+                best_ind = ind1
+                worst_ind = ind2
+            else:
+                best_ind = ind2
+                worst_ind = ind1
+            new_population_best.append(best_ind)
+            new_population_worst.append(worst_ind)
+            population.remove(ind1)
+            population.remove(ind2)
+
+        new_population_best.sort(key=lambda x: -x.score)
+        new_population_worst.sort(key=lambda x: -x.score)
+
+        new_population = new_population_best + new_population_worst
+        best_individuals = new_population[:nb_best_ind]
 
         # Reproduce
         children = []
@@ -53,8 +66,9 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
             children.append(child)
 
         population = best_individuals + children
+        print([(p.score,p.id) for p in population])
 
-        print("\n*******************************\n*******************************\n")
-        logger.log(f"Generation {nb_gen} finished !\nBest score : {best_score}\nMean score : {mean([i.score for i in population])}")
-        print("\n*******************************\n*******************************\n")
+        print("\n===========================\n===========================")
+        logger.log(f"\nGeneration {nb_gen} finished !\nBest score : {best_score}\nMean score : {mean([i.score for i in population])}")
+        print("===========================\n===========================\n")
         nb_gen += 1
