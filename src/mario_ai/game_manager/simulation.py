@@ -49,7 +49,7 @@ def start_simulation(ind: individual):
     # logger.log("Looping now")
 
     t=0
-    velocity_over_time = [255 for _ in range(50)]
+    velocity_over_time = [255 for _ in range(100)]
 
     while t<2500:
         data = client.recv(4096)
@@ -61,7 +61,7 @@ def start_simulation(ind: individual):
         
         speed = abs(255*game_state['player_x_speed']) + abs(255*game_state['player_y_speed'])
         velocity_over_time.append(speed)
-        if all(v == 0 for v in velocity_over_time[-50:]) and game_state['nb_enemies']==0:
+        if all(v < 10 for v in velocity_over_time[-100:]) and game_state['nb_enemies']==0:
             break
 
         input = [game_state['player_x_speed'],
@@ -73,7 +73,7 @@ def start_simulation(ind: individual):
         output = NN.forward(input_tensor).tolist()
 
         action_dict['up']['need_press'] = output[0]
-        action_dict['down']['need_press'] = output[1]
+        action_dict['down']['need_press'] = False
         action_dict['left']['need_press'] = output[2]
         action_dict['right']['need_press'] = output[3]
         action_dict['run']['need_press'] = output[4]
@@ -85,8 +85,8 @@ def start_simulation(ind: individual):
         # logger.log(action_dict)
         t+=1
         
-        if 1>game_state['player_position_x']>ind.get_score():
-            ind.set_score(game_state['player_position_x'])
+        if 1>game_state['player_position_x']>ind.get_score()/100:
+            ind.set_score(round(game_state['player_position_x']*100,2))
 
     controls.stop()
     client.close()

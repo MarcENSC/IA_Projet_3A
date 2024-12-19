@@ -17,6 +17,7 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
     nb_gen = 1
 
     # ind = Individual(neural_network.NN(), 0)
+    # population = [ind for _ in range(nb_ind)]
     population = [Individual(neural_network.NN(), 0) for _ in range(nb_ind)]
     children = population[nb_best_ind:]
 
@@ -25,7 +26,7 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
         actual_ind = 1
         for ind in children:
             simulation.start_simulation(ind)
-            print(f"{actual_ind}/{nb_ind - nb_best_ind} - ID {ind.id} - Score {ind.score}")
+            print(f"{actual_ind}/{nb_ind - nb_best_ind} - ID {ind.id} - Score {ind.score}%")
             actual_ind += 1
         
         # Select Best
@@ -66,7 +67,7 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
             children.append(child)
 
         population = best_individuals + children
-        print([(p.score,p.id) for p in population])
+        # print([(p.score,p.id) for p in population])
 
         print("\n===========================\n===========================")
         logger.log(f"\nGeneration {nb_gen} finished !\nBest score : {best_score}\nMean score : {mean([i.score for i in population])}")
