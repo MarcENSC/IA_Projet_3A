@@ -1,15 +1,18 @@
-from mario_ai.utils import nn_save_manager
-from utils import logger
+from utils import logger,nn_save_manager
 from game_manager import simulation
 from ai import neural_network
 from ai.individual import Individual
 from statistics import mean
 import random as rnd
 import torch
+import time
 
 def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
+
+    training_id = int(time.time())
+    nn_save_manager.new_training_folder(training_id)
 
     logger.log("Starting the game AI...")
     
@@ -22,6 +25,8 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
     children = population[nb_best_ind:]
 
     while True:
+        nn_save_manager.new_generation_folder(training_id, nb_gen)
+
         # Evaluate
         actual_ind = 1
         for ind in children:
@@ -31,8 +36,12 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
         
         # Select Best
         population.sort(key=lambda x: -x.score)
+
+        for p in population:
+            nn_save_manager.export_nn_to_json(p.neural_network, training_id, nb_gen, f"{int(p.score)}_{p.id}.json")
+
         best_score = population[0].score
-        nn_save_manager.export_nn_to_json(population[0].neural_network, "saves/nn.json")
+        nn_save_manager.export_nn_to_json(population[0].neural_network, training_id, nb_gen, "best.json")
 
         new_population_best = []
         new_population_worst = []

@@ -3,7 +3,7 @@ import random as rnd
 import torch
 
 class Individual:
-    id_counter = 0  # Variable de classe pour compter les identifiants uniques
+    id_counter = 1  # Variable de classe pour compter les identifiants uniques
 
     def __init__(self, neural_network, score=0.0):
         self.neural_network = neural_network
