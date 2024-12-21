@@ -40,26 +40,46 @@ def parse_game_data(data,map_mat):
         player_x_bloc = int((player_x + 8) / 16)
         player_y_bloc = 16 - int((player_y + 8)/ 16) - 3
         
-        view = 4
+        x_view_forward = 10
+        x_view_backward = 1
+        y_view_up = 4
+        y_view_down = 7
 
-        map_state = []
-        for i in range(-view+1, view + 2):
-            # print("")
-            for j in range(-view, view + 1):
+        # x_view_forward = 2
+        # x_view_backward = 2
+        # y_view_up = 2
+        # y_view_down = 2
+
+        nb_x = 1 + x_view_forward + x_view_backward
+        nb_y = 1 + y_view_up + y_view_down
+        total_values = nb_x * nb_y
+
+        # print(total_values)
+
+        map_state = [[0 for _ in range(nb_x)] for _ in range(nb_y)]
+        for i in range(-y_view_up,y_view_down+1):
+            for j in range(-x_view_backward, x_view_forward+1):
+                i_state = i + y_view_up
+                j_state =  j + x_view_backward
                 if i==j==0:
                     0
-                    # print("M", end=" ")
                 else:
                     y_index = -player_y_bloc + i
                     x_index = player_x_bloc + j
                     
                     if -len(map_mat) <= y_index < 0 and 0 <= x_index < len(map_mat[0]):
-                        map_state.append(map_mat[y_index][x_index])
-                        # print(map_mat[y_index][x_index], end=" ")
+                        map_state[i_state][j_state] = map_mat[y_index][x_index]
                     else:
-                        map_state.append(0)
-                        # print("0", end=" ")
-                        
+                        if map_state[i_state-1][j_state] == 1:
+                            map_state[i_state][j_state] = 1
+                        else:
+                            map_state[i_state][j_state] = 0
+        
+        # for i in map_state:
+        #     print("")
+        #     for j in i:
+        #         print(j if  j==1 else ".",end=" ")
+
         data['player_position_x'] = player_x / 3150
         data['player_position_y'] = player_y / 180
         data['ecarts'] = ecarts
@@ -70,7 +90,7 @@ def parse_game_data(data,map_mat):
 
     except Exception as e:
         0
-        # print(f"Error: {e}")
+        print(f"Error: {e}")
 
     # Retourner un état de jeu structuré
     return data

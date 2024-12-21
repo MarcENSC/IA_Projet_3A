@@ -51,10 +51,13 @@ def parse_json_to_matrix(filename, cell_size=8):
                     matrix[y - i][x+1] = 1
             elif symbol == "Stone":
                 for i in range(item.get('height', cell_size) // cell_size):
-                    matrix[y - i][x] = 1
+                    matrix[y + i][x] = 1
             else:
                 matrix[y][x] = 0
-
+    # for i in matrix:
+    #     print("")
+    #     for j in i:
+    #         print(j if j==1 else " ",end="")
     return matrix
 
 def extract_floors_and_stocks(filename):
