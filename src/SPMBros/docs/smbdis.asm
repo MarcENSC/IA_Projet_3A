@@ -969,13 +969,16 @@ WSelectBufferTemplate:
       .db $04, $20, $73, $01, $00, $00
 
 GameMenuRoutine:
-              ldy #$00
-              lda SavedJoypad1Bits        ;check to see if either player pressed
-              ora SavedJoypad2Bits        ;only the start button (either joypad)
-              cmp #Start_Button
-              beq StartGame
-              cmp #A_Button+Start_Button  ;check to see if A + start was pressed
-              bne ChkSelect               ;if not, branch to check select button
+              jmp StartWorld1          ; Saute directement au chargement du niveau 1
+
+;GameMenuRoutine:
+              ;ldy #$00
+              ;lda SavedJoypad1Bits        ;check to see if either player pressed
+              ;ora SavedJoypad2Bits        ;only the start button (either joypad)
+              ;cmp #Start_Button
+              ;beq StartGame
+              ;cmp #A_Button+Start_Button  ;check to see if A + start was pressed
+              ;bne ChkSelect               ;if not, branch to check select button
 StartGame:    jmp ChkContinue             ;if either start or A + start, execute here
 ChkSelect:    cmp #Select_Button          ;check to see if the select button was pressed
               beq SelectBLogic            ;if so, branch reset demo timer
@@ -1538,16 +1541,16 @@ NoTimeUp: inc ScreenRoutineTask     ;increment control task 2 tasks forward
 ;-------------------------------------------------------------------------------------
 
 DisplayIntermediate:
-               lda OperMode                 ;check primary mode of operation
-               beq NoInter                  ;if in title screen mode, skip this
-               cmp #GameOverModeValue       ;are we in game over mode?
-               beq GameOverInter            ;if so, proceed to display game over screen
-               lda AltEntranceControl       ;otherwise check for mode of alternate entry
-               bne NoInter                  ;and branch if found
-               ldy AreaType                 ;check if we are on castle level
-               cpy #$03                     ;and if so, branch (possibly residual)
-               beq PlayerInter
-               lda DisableIntermediate      ;if this flag is set, skip intermediate lives display
+               ;lda OperMode                 ;check primary mode of operation
+               ;beq NoInter                  ;if in title screen mode, skip this
+               ;cmp #GameOverModeValue       ;are we in game over mode?
+               ;beq GameOverInter            ;if so, proceed to display game over screen
+               ;lda AltEntranceControl       ;otherwise check for mode of alternate entry
+               ;bne NoInter                  ;and branch if found
+               ;ldy AreaType                 ;check if we are on castle level
+               ;cpy #$03                     ;and if so, branch (possibly residual)
+               ;beq PlayerInter
+               ;lda DisableIntermediate      ;if this flag is set, skip intermediate lives display
                bne NoInter                  ;and jump to specific task, otherwise
 PlayerInter:   jsr DrawPlayer_Intermediate  ;put player in appropriate place for
                lda #$01                     ;lives display, then output lives display to buffer
