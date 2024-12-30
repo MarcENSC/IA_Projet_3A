@@ -5,11 +5,12 @@ from utils import logger
 def main():
     # simulation.load_best_simulation()
 
-    nb_ind = 10
-    best_ind_ratio = 0.2  # Between 0 and 1
+    nb_ind = 100
+    best_ind_ratio = 0.2
     mutation_rate = 0.1
     mutation_range = 0.5
-    genetic_algorithm.train(nb_ind, best_ind_ratio, mutation_rate, mutation_range)
+    nn_format = [144+8, 256, 6]
+    genetic_algorithm.train(nb_ind, best_ind_ratio, mutation_rate, mutation_range, nn_format)
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@ import json
 import os
 from ai import neural_network
 
-def export_nn_to_json(model, training_type, training_id, nb_gen, json_name, path = "saves/"):
+def export_nn_to_json(ind, training_type, training_id, nb_gen, json_name, path = "saves/"):
     if not os.path.exists(path):
         os.makedirs(path)
     
@@ -21,8 +21,13 @@ def export_nn_to_json(model, training_type, training_id, nb_gen, json_name, path
 
     path += json_name
 
+    model = ind.neural_network
+
     model_structure = {
         "architecture": model.__class__.__name__,
+        "id": ind.id,
+        "score": ind.score,
+        "nn_format": model.nn_format,
         "layers": []
     }
     for name, layer in model.named_children():
@@ -42,7 +47,7 @@ def load_nn_from_json(path):
     if model_structure["architecture"] != "NN":
         raise ValueError(f"Architecture non supportée : {model_structure['architecture']}")
     
-    model = neural_network.NN()
+    model = neural_network.NN(model_structure["nn_format"])
     layers = dict(model.named_children())
     
     for layer_info in model_structure["layers"]:

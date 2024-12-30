@@ -7,7 +7,7 @@ import random as rnd
 import torch
 import time
 
-def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
+def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range, nn_format):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
@@ -16,7 +16,7 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
     
     nb_best_ind = int(nb_ind * best_ind_ratio)
 
-    population = [Individual(neural_network.NN(), 0) for _ in range(nb_ind)]
+    population = [Individual(neural_network.NN(nn_format), 0) for _ in range(nb_ind)]
     children = population
 
     nb_gen = 1
@@ -56,7 +56,7 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
         for _ in range(nb_ind - nb_best_ind):
             ind1, ind2 = rnd.sample(best_individuals, 2)
 
-            child = Individual(neural_network.NN(), 0)
+            child = Individual(neural_network.NN(nn_format), 0)
             child.cross(ind1, ind2)
             child.mutate(mutation_rate, mutation_range)
 
@@ -66,9 +66,9 @@ def train(nb_ind, best_ind_ratio, mutation_rate, mutation_range):
         # print([(p.score,p.id) for p in population])
 
         for p in best_individuals:
-            nn_save_manager.export_nn_to_json(p.neural_network, training_type, training_id, nb_gen, f"{p.id}_{int(p.score)}.json")
+            nn_save_manager.export_nn_to_json(p, training_type, training_id, nb_gen, f"{p.id}_{int(p.score)}.json")
 
         print(2 * f"{'=' * 25}\n",end="")
-        logger.log(f"\nGeneration : {nb_gen} finished !\nBest score : {best_score}\nBest ID : {best_id}\nMean score : {moy}\n")
+        logger.log(f"\nGeneration : {nb_gen} finished !\nBest score : {best_score}\nBest ID : {best_id}\nMean score : {moy}")
         print(2 * f"{'=' * 25}\n")
         nb_gen += 1
