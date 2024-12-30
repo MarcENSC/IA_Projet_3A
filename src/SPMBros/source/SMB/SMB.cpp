@@ -383,15 +383,7 @@ TitleScreenMode:
     }
 
 GameMenuRoutine:
-    y = 0x00;
-    a = M(SavedJoypad1Bits); // check to see if either player pressed
-    a |= M(SavedJoypad2Bits); // only the start button (either joypad)
-    compare(a, Start_Button);
-    if (z)
-        goto StartGame;
-    compare(a, A_Button + Start_Button); // check to see if A + start was pressed
-    if (!z)
-        goto ChkSelect; // if not, branch to check select button
+    goto StartWorld1; //  Saute directement au chargement du niveau 1
 
 StartGame: // if either start or A + start, execute here
     goto ChkContinue;
@@ -1076,20 +1068,6 @@ NoTimeUp: // increment control task 2 tasks forward
     goto IncSubtask;
 
 DisplayIntermediate:
-    a = M(OperMode); // check primary mode of operation
-    if (z)
-        goto NoInter; // if in title screen mode, skip this
-    compare(a, GameOverModeValue); // are we in game over mode?
-    if (z)
-        goto GameOverInter; // if so, proceed to display game over screen
-    a = M(AltEntranceControl); // otherwise check for mode of alternate entry
-    if (!z)
-        goto NoInter; // and branch if found
-    y = M(AreaType); // check if we are on castle level
-    compare(y, 0x03); // and if so, branch (possibly residual)
-    if (z)
-        goto PlayerInter;
-    a = M(DisableIntermediate); // if this flag is set, skip intermediate lives display
     if (!z)
         goto NoInter; // and jump to specific task, otherwise
 

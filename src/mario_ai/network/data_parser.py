@@ -80,10 +80,13 @@ def parse_game_data(data,map_mat):
         #     for j in i:
         #         print(j if  j==1 else ".",end=" ")
 
+        flattened_map_state = [item for sublist in map_state for item in sublist]
+
+
         data['player_position_x'] = player_x / 3150
         data['player_position_y'] = player_y / 180
         data['ecarts'] = ecarts
-        data['map_state'] = map_state
+        data['map_state'] = flattened_map_state
         data['player_x_speed'] = player_X_speed
         data['player_y_speed'] = player_Y_speed
         data['nb_enemies'] = nb_enemies

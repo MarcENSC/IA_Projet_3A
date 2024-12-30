@@ -13,7 +13,7 @@ def start_simulation(ind: individual):
     # Lancer le jeu (C++ côté serveur)
     # logger.log("Launching game...")
     subprocess.Popen(['bash', "../SPMBros/buildproject_from_python.sh", 'build'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)    
-    time.sleep(2)
+    time.sleep(1)
 
     # Connexion au serveur
     client = server.connect_to_server()
@@ -41,10 +41,6 @@ def start_simulation(ind: individual):
     # logger.log("Dictionnary initialized")
 
     time.sleep(1)
-    controls.press(Action.ENTER)
-    time.sleep(1)
-    controls.unpress(Action.ENTER)
-    time.sleep(3)
 
     # logger.log("Looping now")
 
@@ -61,7 +57,7 @@ def start_simulation(ind: individual):
         
         speed = abs(255*game_state['player_x_speed']) + abs(255*game_state['player_y_speed'])
         velocity_over_time.append(speed)
-        if all(v < 10 for v in velocity_over_time[-100:]) and game_state['nb_enemies']==0:
+        if all(v < 10 for v in velocity_over_time[-100:]):
             break
 
         input = [game_state['player_x_speed'],

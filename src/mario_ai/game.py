@@ -5,7 +5,7 @@ from game_manager import map_manager
 
 def main():
     subprocess.Popen(['bash', "../SPMBros/buildproject_from_python.sh", 'build'])
-    time.sleep(2)
+    time.sleep(1)
 
     filename = 'maps/World11.json'
     map_matrix = map_manager.parse_json_to_matrix(filename)
