@@ -18,7 +18,7 @@ def main():
     mutation_range = 0.5
     nn_format = [144+8, 256, 128, 6]
     neuron_mutation_rate = 1
-    layer_mutation_rate = 0
+    layer_mutation_rate = 1
     neat.train(nb_ind, 
                best_ind_ratio, 
                mutation_rate, 

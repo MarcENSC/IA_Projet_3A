@@ -26,38 +26,45 @@ class NN(nn.Module):
         return [param.size() for param in self.parameters()]
     
     def add_neuron(self, layer_m_rate):
-        if rnd.random() < layer_m_rate or len(self.nn_format) <= 2:
-            layer_index = self.add_layer()
-        else:
+        # if rnd.random() < layer_m_rate or len(self.nn_format) <= 2:
+        #     layer_index = self.add_layer()
+        # else:
             # Select a random layer
             layer_index = rnd.randint(0, len(self.nn_format) - 3)
         
-        layer = self.linear_relu_stack[layer_index * 2] # *2 because of ReLus
-        self.nn_format[layer_index] += 1
+            layer = self.linear_relu_stack[layer_index * 2] # *2 because of ReLus
+            self.nn_format[layer_index] += 1
 
-        # Update current layer
-        new_weight = torch.zeros(layer.weight.size(0)+1, layer.weight.size(1))
-        new_weight[:-1, :] = layer.weight
+            # Update current layer
+            new_weight = torch.zeros(layer.weight.size(0)+1, layer.weight.size(1))
+            new_weight[:-1, :] = layer.weight
 
-        new_bias = torch.zeros(layer.bias.size(0)+1)
-        new_bias[:-1] = layer.bias
+            new_bias = torch.zeros(layer.bias.size(0)+1)
+            new_bias[:-1] = layer.bias
 
-        layer.weight = nn.Parameter(new_weight)
-        layer.bias = nn.Parameter(new_bias)
+            layer.weight = nn.Parameter(new_weight)
+            layer.bias = nn.Parameter(new_bias)
 
-        layer.in_features = layer.weight.size(1)
-        layer.out_features = layer.weight.size(0)
+            layer.in_features = layer.weight.size(1)
+            layer.out_features = layer.weight.size(0)
 
 
-        # Update next layer
-        next_layer = self.linear_relu_stack[(layer_index + 1) * 2]
-        next_layer.in_features = next_layer.weight.size(1) + 1
-        new_next_weight = torch.zeros(next_layer.weight.size(0), next_layer.weight.size(1)+1)
-        new_next_weight[:, :-1] = next_layer.weight
+            # Update next layer
+            next_layer = self.linear_relu_stack[(layer_index + 1) * 2]
+            next_layer.in_features = next_layer.weight.size(1) + 1
+            new_next_weight = torch.zeros(next_layer.weight.size(0), next_layer.weight.size(1)+1)
+            new_next_weight[:, :-1] = next_layer.weight
 
-        next_layer.weight = nn.Parameter(new_next_weight)
+            next_layer.weight = nn.Parameter(new_next_weight)
 
     def add_layer(self):
-        # select layer position in nn_format, les entrées et sorties ne doivent pas changer
-        layer_index = rnd.randint(0, len(self.nn_format) - 2)
+        layer_index = rnd.randint(0, len(self.nn_format) - 3)
+
+        self.nn_format.insert(layer_index + 1, 1)
+        input_size = self.nn_format[layer_index]
+        new_layer = nn.Linear(input_size, 1)
+        relu = nn.ReLU()
+        self.linear_relu_stack = nn.Sequential(*list(self.linear_relu_stack.children())[:2*layer_index] + [new_layer, relu] + list(self.linear_relu_stack.children())[2*layer_index:])
+
+        return layer_index
         
