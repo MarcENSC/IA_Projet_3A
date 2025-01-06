@@ -26,7 +26,13 @@ def train(nb_ind, best_ind_ratio, param_mutation_rate, neuron_mutation_rate, lay
         new_population = select_best_individuals(population, nb_ind)
         best_individuals = new_population[:nb_best_ind]
 
-        children = reproduce(best_individuals, nb_ind, nb_best_ind, nn_format, param_mutation_rate, mutation_range)
+        children = neat_reproduce(best_individuals, 
+                                  nb_ind, nb_best_ind, 
+                                  nn_format, 
+                                  param_mutation_rate, 
+                                  neuron_mutation_rate, 
+                                  layer_mutation_rate, 
+                                  mutation_range)
         population = best_individuals + children
 
         save_best_individuals(best_individuals, training_type, training_id, nb_gen)

@@ -1,7 +1,10 @@
 import logging
+import os
 
 # Configuration du logger
 log_file = "saves/log.txt"
+if not os.path.exists("saves"):
+    os.makedirs("saves")
 
 logging.basicConfig(
     level=logging.INFO,  # Le niveau de base des messages à afficher (INFO, DEBUG, WARNING, etc.)

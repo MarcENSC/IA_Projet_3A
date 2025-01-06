@@ -49,3 +49,17 @@ class Individual:
             if rnd.random() < m_rate:
                 mutation_factor = torch.normal(mean=torch.zeros_like(p), std=m_range * torch.ones_like(p))
                 p.data += mutation_factor
+
+    def neat_cross(self, parent1_nn, parent2_nn, alpha=0.5):
+        self.neural_network = copy.deepcopy(parent1_nn)
+
+    def mutate_neat(self, m_rate, neuron_m_rate, layer_m_rate, m_range):
+        params = list(self.neural_network.parameters())
+        for p in params:
+            if rnd.random() < m_rate:
+                mutation_factor = torch.normal(mean=torch.zeros_like(p), std=m_range * torch.ones_like(p))
+                p.data += mutation_factor
+        if rnd.random() < neuron_m_rate:
+            self.neural_network.add_neuron(layer_m_rate)
+            print(self.neural_network.shape())
+        

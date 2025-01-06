@@ -39,6 +39,16 @@ def reproduce(best_individuals, nb_ind, nb_best_ind, nn_format, mutation_rate, m
         children.append(child)
     return children
 
+def neat_reproduce(best_individuals, nb_ind, nb_best_ind, nn_format, mutation_rate, neuron_mutation_rate, layer_mutation_rate, mutation_range):
+    children = []
+    for _ in range(nb_ind - nb_best_ind):
+        ind1, ind2 = rnd.sample(best_individuals, 2)
+        child = Individual(neural_network.NN(nn_format), 0)
+        child.neat_cross(ind1.neural_network, ind2.neural_network, rnd.random())
+        child.mutate_neat(mutation_rate, neuron_mutation_rate, layer_mutation_rate, mutation_range)
+        children.append(child)
+    return children
+
 def save_best_individuals(best_individuals, training_type, training_id, nb_gen):
     for p in best_individuals:
         nn_save_manager.export_nn_to_json(p, training_type, training_id, nb_gen, f"{p.id}_{int(p.score)}.json")
