@@ -1,6 +1,7 @@
-from ai.neural_network import cross
+from ai import neural_network
 import random as rnd
 import torch
+import copy
 
 class Individual:
     id_counter = 1
@@ -20,8 +21,27 @@ class Individual:
     def get_neural_network(self):
         return self.neural_network
 
-    def cross(self, ind1, ind2):
-        self.neural_network = cross(ind1.neural_network, ind2.neural_network, rnd.random())
+    def cross(self, parent1_nn, parent2_nn, alpha=0.5):
+        parent1_nn = copy.deepcopy(parent1_nn)
+        parent2_nn = copy.deepcopy(parent2_nn)
+
+        parent1_params = list(parent1_nn.parameters())
+        parent2_params = list(parent2_nn.parameters())
+        
+        child_params = []
+        
+        for param1, param2 in zip(parent1_params, parent2_params):
+            child_param = alpha * param1 + (1 - alpha) * param2
+            child_params.append(child_param)
+        
+        child_nn = neural_network.NN(parent1_nn.nn_format)
+        
+        child_nn_params = child_nn.parameters()
+        
+        for child_param, new_param in zip(child_nn_params, child_params):
+            child_param.data = new_param.data
+        
+        self.neural_network = child_nn
 
     def mutate(self, m_rate, m_range):
         params = list(self.neural_network.parameters())
