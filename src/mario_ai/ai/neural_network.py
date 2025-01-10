@@ -67,4 +67,11 @@ class NN(nn.Module):
         self.linear_relu_stack = nn.Sequential(*list(self.linear_relu_stack.children())[:2*layer_index] + [new_layer, relu] + list(self.linear_relu_stack.children())[2*layer_index:])
 
         return layer_index
-        
+
+nn_format = [152, 32, 16, 6]
+input = torch.randn(1, nn_format[0])
+
+model = NN(nn_format)
+print(model)
+output = model(input)
+print(output)
