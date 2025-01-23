@@ -3,11 +3,10 @@ import subprocess
 import torch
 from game_manager import controls, map_manager
 from game_manager.actions import Action
-from ai import neural_network
 from network import server, data_parser
 from utils import logger, nn_save_manager
 from ai import individual
-import torch
+from statistics import mean
 
 def start_simulation(ind: individual):
     # Lancer le jeu (C++ côté serveur)
@@ -45,7 +44,8 @@ def start_simulation(ind: individual):
     # logger.log("Looping now")
 
     t=0
-    velocity_over_time = [255 for _ in range(100)]
+    velocity_over_time = [0 for _ in range(100)]+[10]
+    x_velocity = []
 
     while t<2500:
         data = client.recv(4096)
@@ -55,6 +55,8 @@ def start_simulation(ind: individual):
         game_state = data_parser.parse_game_data(data,map_matrix)
         # logger.log(game_state)
         
+
+        x_velocity.append(game_state['player_x_speed'])
         speed = abs(255*game_state['player_x_speed']) + abs(255*game_state['player_y_speed'])
         velocity_over_time.append(speed)
         if all(v < 10 for v in velocity_over_time[-100:]):
@@ -83,6 +85,11 @@ def start_simulation(ind: individual):
         
         if 1>game_state['player_position_x']>ind.get_score()/100:
             ind.set_score(round(game_state['player_position_x']*100,2))
+
+    print(f"== {ind.score} ==")
+
+    # score devient score + score étant donné la moyenne de vitesse le tout normalisé
+    ind.score += ind.score * mean(x_velocity) / 128
 
     controls.stop()
     client.close()

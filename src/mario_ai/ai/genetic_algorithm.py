@@ -21,10 +21,10 @@ def train(nb_ind, best_ind_ratio, param_mutation_rate, mutation_range, nn_format
         population.sort(key=lambda x: -x.score)
         best_score = population[0].score
         best_id = population[0].id
-        moy = mean([p.score for p in population])
 
         new_population = select_best_individuals(population, nb_ind)
         best_individuals = new_population[:nb_best_ind]
+        moy = mean([p.score for p in best_individuals])
 
         children = reproduce(best_individuals, nb_ind, nb_best_ind, nn_format, param_mutation_rate, mutation_range)
         population = best_individuals + children

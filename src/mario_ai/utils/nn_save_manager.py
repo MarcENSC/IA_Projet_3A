@@ -1,7 +1,7 @@
 import torch
 import json
 import os
-from ai import neural_network
+from ai import sequential_neural_network
 
 def export_nn_to_json(ind, training_type, training_id, nb_gen, json_name, path = "saves/"):
     if not os.path.exists(path):
@@ -47,7 +47,7 @@ def load_nn_from_json(path):
     if model_structure["architecture"] != "NN":
         raise ValueError(f"Architecture non supportée : {model_structure['architecture']}")
     
-    model = neural_network.NN(model_structure["nn_format"])
+    model = sequential_neural_network.NN(model_structure["nn_format"])
     layers = dict(model.named_children())
     
     for layer_info in model_structure["layers"]:
