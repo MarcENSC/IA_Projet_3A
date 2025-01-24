@@ -4,10 +4,18 @@ from ai import sequential_neural_network, recurrent_neural_network
 from ai.individual import Individual
 import random as rnd
 
-def initialize_population(nb_ind, nn_format):
+def initialize_population(nb_ind, nn_format, pretrained_pop):
+    if pretrained_pop:
+        pop = nn_save_manager.load_population(f"saves/{pretrained_pop}")
+        pop += reproduce(pop, nb_ind, len(pop), nn_format, 0.001, 0.001)
+    else:
+        pop = [Individual(sequential_neural_network.NN(nn_format), 0) for _ in range(nb_ind)]
+    
+    return pop
+
     # ind = Individual(sequential_neural_network.NN(nn_format), 0)
     # return [ind for _ in range(nb_ind)]
-    return [Individual(sequential_neural_network.NN(nn_format), 0) for _ in range(nb_ind)]
+
     # return [Individual(recurrent_neural_network.RNN(nn_format), 0) for _ in range(nb_ind)]
 
 def evaluate_population(children):

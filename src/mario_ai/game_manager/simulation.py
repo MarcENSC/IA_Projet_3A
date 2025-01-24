@@ -56,7 +56,7 @@ def start_simulation(ind: individual):
         # logger.log(game_state)
         
 
-        x_velocity.append(game_state['player_x_speed'])
+        x_velocity.append(game_state['player_x_speed']*255 / 40)
         speed = abs(255*game_state['player_x_speed']) + abs(255*game_state['player_y_speed'])
         velocity_over_time.append(speed)
         if all(v < 10 for v in velocity_over_time[-100:]):
@@ -86,10 +86,10 @@ def start_simulation(ind: individual):
         if 1>game_state['player_position_x']>ind.get_score()/100:
             ind.set_score(round(game_state['player_position_x']*100,2))
 
-    print(f"== {ind.score} ==")
+    print(f"\n== {ind.score} | {mean(x_velocity)} ==")
 
     # score devient score + score étant donné la moyenne de vitesse le tout normalisé
-    ind.score += ind.score * mean(x_velocity) / 128
+    ind.score += mean(x_velocity)
 
     controls.stop()
     client.close()

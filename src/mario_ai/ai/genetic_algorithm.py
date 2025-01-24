@@ -1,9 +1,10 @@
 from statistics import mean
 from ai.methods import *
+from utils.nn_save_manager import *
 import torch
 import time
 
-def train(nb_ind, best_ind_ratio, param_mutation_rate, mutation_range, nn_format):
+def train(nb_ind, best_ind_ratio, param_mutation_rate, mutation_range, nn_format, pretrained_population=""):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
@@ -11,8 +12,10 @@ def train(nb_ind, best_ind_ratio, param_mutation_rate, mutation_range, nn_format
     training_type = "genetic_algorithm"
     nb_best_ind = int(nb_ind * best_ind_ratio)
 
-    population = initialize_population(nb_ind, nn_format)
+    population = initialize_population(nb_ind, nn_format, pretrained_population)
     children = population
+
+    print(len(children))
 
     nb_gen = 1
     while True:

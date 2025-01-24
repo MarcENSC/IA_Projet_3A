@@ -1,7 +1,7 @@
 import torch
 import json
 import os
-from ai import sequential_neural_network
+from ai import sequential_neural_network, individual
 
 def export_nn_to_json(ind, training_type, training_id, nb_gen, json_name, path = "saves/"):
     if not os.path.exists(path):
@@ -60,3 +60,19 @@ def load_nn_from_json(path):
             raise ValueError(f"Couche {layer_name} non trouvée dans le modèle.")
     
     return model
+
+def load_population(population_path):
+    population = []
+    
+    if not os.path.exists(population_path):
+        raise FileNotFoundError(f"Le chemin {population_path} n'existe pas.")
+    
+    for json_file in os.listdir(population_path):
+        if json_file.endswith(".json"):
+            json_path = os.path.join(population_path, json_file)
+            
+            temp_neural_network = load_nn_from_json(json_path)
+            temp_ind = individual.Individual(temp_neural_network)
+            population.append(temp_ind)
+    
+    return population
